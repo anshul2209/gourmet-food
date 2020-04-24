@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import RestrauntTile from './components/RestrauntTile';
-import Filters from './components/Filters';
+import RestrauntTile from './components/RestrauntTile.js';
+import Filters from './components/Filters.js';
 import './App.css';
 
 export default class App extends React.Component {
