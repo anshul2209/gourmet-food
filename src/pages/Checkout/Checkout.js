@@ -5,16 +5,13 @@ import classnames from "classnames";
 
 const Checkout = (props) => {
   const { state } = useContext(OrderContext);
-  const items = Object.values(state.order) || [];
+  const items = Object.values(state.order || {})
   const add = (acc, current) => acc + current;
-  const itemQuantity = items.map((item) => item.quantity).reduce(add);
+  const itemQuantity = items.map((item) => item.quantity).reduce(add, 0);
   const total = parseInt(
-    items.map((item) => item.price * item.quantity).reduce(add),
+    items.map((item) => item.price * item.quantity).reduce(add, 0),
     10
   );
-  const handleCheckout = () => {
-    props.history.push("/confirm");
-  };
 
   return (
     <div className={classnames("container", css.checkoutWrapper)}>
@@ -53,7 +50,7 @@ const Checkout = (props) => {
         </div>
       </section>
       <div className={css.checkout}>
-        <button onClick={handleCheckout}>Checkout</button>
+        <button onClick={props.handleCheckout}>Checkout</button>
       </div>
     </div>
   );

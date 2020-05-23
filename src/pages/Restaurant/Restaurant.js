@@ -18,10 +18,14 @@ const Restaurant = () => (
 
 const RestaurantDetail = (props) => {
   const [menuItems, setmenuItems] = useState([]);
+  const refs = menuItems
+    .map((item) => item.menu)
+    .reduce((acc, value) => {
+      acc[value.id] = React.createRef();
+      return acc;
+    }, {});
+
   const {
-    match: {
-      params: { restaurant_id },
-    },
     location: {
       state: { restaurant },
     },
@@ -58,16 +62,18 @@ const RestaurantDetail = (props) => {
   };
   const featuredDivStyle = {
     backgroundImage: `url(${featured_image})`,
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
+    backgroundSize: "contain",
   };
 
-  useEffect(() => {
-    loadDailyMenu();
-  }, []);
+   // eslint-disable-next-line
+  useEffect(() => loadDailyMenu(), []);
 
   const handleCategorySelect = (event) => {
-    console.log(event.target.id);
+    const id = event.target.id;
+    refs[id].current.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   };
   const { state, dispatch } = useContext(OrderContext);
 
@@ -96,58 +102,85 @@ const RestaurantDetail = (props) => {
     dispatch({ type: "checkout", payload: checkoutItems });
   };
 
+  console.log(state.order);
+
+  const isCheckout = !!Object.values(state.order).length;
+
+  const handleCheckout = () => {
+    props.history.push("/confirm");
+  };
   return (
     <React.Fragment>
-      <div className={classnames("container", css.restaurantWrapper)}>
-        <div className={classnames("row", css.featured)}>
-          <div className="col-sm-12">
-            <div className={css.background} style={featuredDivStyle} />
-          </div>
-        </div>
-        <div className={classnames("row", css.details)}>
-          <div className={classnames("col-lg-3", "col-sm-12")}>
-            <span className={css.name}>{name}</span>
-          </div>
-          <div className={classnames("col-lg-1", "col-sm-6")}>
-            <span className={css.price}>{price_range}</span>
-          </div>
-          <div className={classnames("col-lg-1", "col-sm-6")}>
-            <span className={css.rating}>{user_rating.aggregate_rating}</span>
-          </div>
-          <div className={classnames("col-lg-7", "col-sm-12")}>
-            <ul className={css.highlights}>
-              {highlights.map((highlight) => {
-                return <li key={highlight}>{highlight}</li>;
-              })}
-            </ul>
-          </div>
-        </div>
-        <div
-          className={classnames("row", css.categories)}
-          onClick={handleCategorySelect}
-        >
-          {menuItems.map((item) => (
-            <div className={css.item} id={item.menu.id}>
-              {item.menu.name}
-            </div>
-          ))}
-        </div>
-        <div className={classnames("row", css.menu)}>
-          {menuItems.map((item, idx) => {
-            return (
-              <div className={classnames("col-sm-12")} key={idx}>
-                <MenuCategory
-                  categoryMenu={item.menu}
-                  handleItemSelection={handleItemSelection}
-                />
+      <div className={classnames("container-fluid", css.restaurantWrapper)}>
+        <div className={classnames("row")}>
+          <div className={classnames(isCheckout ? "col-md-9" : "col-12")}>
+            <div className={classnames("row")}>
+              <div className="col-sm-12">
+                <div className={css.background} style={featuredDivStyle} />
               </div>
-            );
-          })}
+            </div>
+            <div className={classnames("row", css.details, "mb-3")}>
+              <div className={classnames("col-lg-3", "col-sm-12", "my-auto")}>
+                <span className={css.name}>{name}</span>
+              </div>
+              <div className={classnames("col-lg-1", "col-sm-6", "my-auto")}>
+                <span className={css.price}>{price_range}</span>
+              </div>
+              <div className={classnames("col-lg-1", "col-sm-6", "my-auto")}>
+                <span className={css.rating}>
+                  {user_rating.aggregate_rating}
+                </span>
+              </div>
+              <div className={classnames("col-lg-7", "col-sm-12", "my-auto")}>
+                <ul className={css.highlights}>
+                  {highlights.map((highlight) => {
+                    return <li key={highlight}>{highlight}</li>;
+                  })}
+                </ul>
+              </div>
+            </div>
+            <div className={classnames("row")}>
+              <div
+                className={classnames("col-md-2 col-sm-12")}
+                onClick={handleCategorySelect}
+              >
+                <div className={css.categories}>
+                  {menuItems.map((item) => {
+                    return (
+                      <div className={css.item} id={item.menu.id}>
+                        {item.menu.name}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+                <div className={classnames("col-md-10 col-sm-12")}>
+                  <div className={css.menu}>
+                    {menuItems.map((item) => {
+                      return (
+                        <div
+                          className={classnames("col-sm-12", css.menucategory)}
+                          key={item.menu.id}
+                        >
+                          <h5 ref={refs[item.menu.id]}>{item.menu.name}</h5>
+                          <MenuCategory
+                            categoryMenu={item.menu}
+                            handleItemSelection={handleItemSelection}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div className={classnames(isCheckout ? "col-md-3" : "d-none")}>
+            <div className={css.checkout}>
+              <Checkout handleCheckout={handleCheckout} />
+            </div>
+          </div>
         </div>
       </div>
-      { state.order && <div className={css.checkout}>
-        <Checkout />
-      </div>}
     </React.Fragment>
   );
 };

@@ -8,9 +8,9 @@
   .image {
     text-align: center;
     background: grey;
-    min-height: 200px;
-    // height: 100px;
-    // width: 100px;
+    height: 200px;
+    width: 200px;
+    margin: auto;
   }
 
   .description {
@@ -20,6 +20,14 @@
       align-self: center;
       justify-content: space-between;
       padding: 5px 0px;
+      .edit{
+        border: 1px solid var(--txt-color-lightblack);
+        padding: 0px 5px;
+        cursor: pointer;
+        span{
+          margin: 0px 5px;
+        }
+      }
     }
 
     .name {

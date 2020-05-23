@@ -1,67 +1,121 @@
-import React, { Component } from 'react';
-import { RestaurantTile, Loader, Animate } from '../../components';
-import axios from 'axios';
-import { restraunts_url } from '../../config';
+import React, { Component } from "react";
+import { RestaurantTile, Loader, Animate, Filters } from "../../components";
+import axios from "axios";
+import { restraunts_url } from "../../config";
+import css from "./Home.module.scss";
+import classnames from "classnames";
 
 class Home extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			restaurantList: [],
-			isLoading: true
-		}
-	}
-	componentDidMount() {
-		this.loadRestaurants();
-	}
+  constructor(props) {
+    super(props);
+    this.state = {
+      allRestaurants: [],
+      restaurantList: [],
+      isLoading: true,
+      cuisineList: [],
+    };
+  }
+  componentDidMount() {
+    this.loadRestaurants();
+  }
 
-	loadRestaurants = async () => {
-		const headers = {
-			'user-key': process.env.REACT_APP_USER_KEY
-		}
-		const response = await axios.get(restraunts_url, { headers })
-			.catch(err => console.error(`axios error is ${err.message}`));
+  loadRestaurants = async () => {
+    const headers = {
+      "user-key": process.env.REACT_APP_USER_KEY,
+    };
+    const response = await axios
+      .get(restraunts_url, { headers })
+      .catch((err) => console.error(`axios error is ${err.message}`));
 
-		response && this.setState({
-			restaurantList: response.data.restaurants,
-			isLoading: false
+    if (response) {
+      const restaurantList = response.data.restaurants;
+      const cuisineList = restaurantList.map(
+        (rest) => rest.restaurant.cuisines.split(", ") // get array of arrays
+      );
+
+      this.setState({
+        allRestaurants: restaurantList,
+        restaurantList,
+        isLoading: false,
+        cusineList: [...new Set([].concat(...cuisineList))], // flatten array of arrays
+      });
+    }
+  };
+
+  handleRestaurantClick = (restaurant) => {
+    this.props.history.push({
+      pathname: `/restaurants/${restaurant.id}`,
+      state: { restaurant },
+    });
+  };
+
+  handleFilter = (query) => {
+    const { allRestaurants } = this.state;
+    const { rating, cost, cusine } = query;
+
+    const restaurants = allRestaurants.filter((item) => {
+      const { restaurant } = item;
+      const { cuisines, user_rating, average_cost_for_two } = restaurant;
+      return (
+        parseInt(user_rating.aggregate_rating, 10) >= parseInt(rating, 10) &&
+        cuisines.toLowerCase().trim().includes(cusine.toLowerCase().trim()) &&
+        parseInt(average_cost_for_two, 10) <= parseInt(cost, 10)
+      );
 		});
-	}
+		
+    this.setState({
+      restaurantList: restaurants,
+    });
+  };
 
-	handleRestaurantClick = restaurant => {
-		this.props.history.push({ 
-			pathname: `/restaurants/${restaurant.id}`,
-			state: { restaurant }
-		})
-	}
-	render() {
-		const { restaurantList, isLoading } = this.state;
-		const isRestaurantAvailable = !!(restaurantList && restaurantList.length && !isLoading);
+  render() {
+    const { restaurantList, isLoading, cusineList } = this.state;
 
-		return (
-			<React.Fragment>
-				{isLoading && <Loader text="Restaurant Loading..." />}
-				<div className="container">
-					<div className="row">
-						{
-							restaurantList.map(restaurantObj => {
-								return (
-									<div className="col-md-4 col-sm-12" key={restaurantObj.restaurant.id}>
-										<Animate in={isRestaurantAvailable}>
-											<RestaurantTile 
-												restaurant={restaurantObj.restaurant}
-												onClick={this.handleRestaurantClick}
-											/>
-										</Animate>
-									</div>
-								)
-							})
-						}
-					</div>
-				</div>
-			</React.Fragment >
-		)
-	}
+    const isRestaurantAvailable = !!(
+      restaurantList &&
+      restaurantList.length &&
+      !isLoading
+    );
+
+    if (isLoading) {
+      return <Loader text="Restaurant Loading..." />;
+    }
+    return (
+      <React.Fragment>
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-md-2 col-sm-12">
+              <div className={classnames("", css.filter)}>
+                <Filters
+                  cusineList={cusineList}
+                  handleQuery={this.handleFilter}
+                />
+              </div>
+            </div>
+            <div className="col-md-10 col-sm-12">
+              <div className="row">
+                {restaurantList.map((restaurantObj) => {
+                  return (
+                    <div
+                      className="col-md-3 col-sm-12 mb-3"
+                      key={restaurantObj.restaurant.id}
+                    >
+                      <Animate in={isRestaurantAvailable}>
+                        <RestaurantTile
+                          restaurant={restaurantObj.restaurant}
+                          onClick={this.handleRestaurantClick}
+                        />
+                      </Animate>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  }
 }
 
 export default Home;

@@ -1,6 +1,10 @@
 .restaurantWrapper {
+  background: white;
+
   .background {
     height: 300px;
+    background: white;
+
   }
 
   .name {
@@ -10,35 +14,60 @@
   }
 
   .highlights {
+    margin: 0px;
+    padding: 0px;
     li {
-      float: left;
+      display: inline-flex;
+      &:before {
+        content: "\2022";
+        padding-left: 8px;
+        padding-right: 3px;
+      }
     }
   }
 
-  .menu {
-    max-height: 600px;
-    overflow: auto;
+  .details {
+    background: white;
+    padding: 10px 0px;
+    margin: 0px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
 
+  .menucategory{
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
   .categories {
+    background: white;
+    padding: 10px;
+    position: sticky;
+    top: 80px;
+    width: 100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
     .item {
       font-size: 1rem;
       line-height: 1rem;
       padding: 5px;
       color: var(--txt-color-lightblack);
       cursor: pointer;
-      margin: 0px 5px;
+      margin: 5px;
 
       &:hover {
         color: var(--txt-color-black);
         font-weight: 400;
+        border-left: 2px solid red;
       }
     }
   }
 }
-.checkout{
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
+
+.checkout {
+  position: sticky;
+  top: 80px;
+  background: white;
+  width: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
