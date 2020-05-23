@@ -1,0 +1,35 @@
+.tile{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    box-sizing: border-box;
+    height: 100%;
+    margin-bottom: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.name{
+    font-size: 1rem;
+    font-weight: 500;
+    word-break: break-word; 
+}
+
+.cuisnes{
+    font-size: 0.8rem;
+    margin-top: 4px;
+    height: 30px;
+}
+
+.cost{
+    display: flex;
+    font-size: 0.8rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.timings{
+    border-top: 1px solid #e9e9eb;
+    font-size: 0.8rem;
+    margin: 4px;
+    padding: 5px;
+}

@@ -1,0 +1,44 @@
+.restaurantWrapper {
+  .background {
+    height: 300px;
+  }
+
+  .name {
+    white-space: nowrap;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .highlights {
+    li {
+      float: left;
+    }
+  }
+
+  .menu {
+    max-height: 600px;
+    overflow: auto;
+  }
+
+  .categories {
+    .item {
+      font-size: 1rem;
+      line-height: 1rem;
+      padding: 5px;
+      color: var(--txt-color-lightblack);
+      cursor: pointer;
+      margin: 0px 5px;
+
+      &:hover {
+        color: var(--txt-color-black);
+        font-weight: 400;
+      }
+    }
+  }
+}
+.checkout{
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}

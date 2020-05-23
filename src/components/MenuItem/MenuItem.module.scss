@@ -1,0 +1,32 @@
+.category {
+  margin: 10px 0px;
+}
+
+.item {
+  padding: 10px;
+
+  .image {
+    text-align: center;
+    background: grey;
+    min-height: 200px;
+    // height: 100px;
+    // width: 100px;
+  }
+
+  .description {
+
+    .buyWrapper {
+      display: flex;
+      align-self: center;
+      justify-content: space-between;
+      padding: 5px 0px;
+    }
+
+    .name {
+      padding: 5px 0px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--txt-color-lightblack);
+    }
+  }
+}
