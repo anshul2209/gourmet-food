@@ -1,0 +1,58 @@
+.filter_desktop{
+  overflow: scroll;
+  background: white;
+  height: 90vh;
+  position: fixed;
+  width: 16%;
+  box-shadow: 0 20px 20px 0 rgba(0, 0, 0, 0.2);
+}
+.filter_mobile {
+  overflow: scroll;
+  background: white;
+  // height: 90vh;
+  position: fixed;
+  // width: 16%;
+  box-shadow: 0 20px 20px 0 rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+
+  .apply {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 2;
+    height: 50px;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 1rem;
+    line-height: 2rem;
+    font-weight: 400;
+  }
+  .close{
+    padding: 10px;
+    cursor: pointer;
+    position: fixed;
+    right: 0px;
+    top: 0px;
+  }
+}
+
+.stickyFilter {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 2;
+  height: 50px;
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 1rem;
+  line-height: 2rem;
+  font-weight: 400;
+}

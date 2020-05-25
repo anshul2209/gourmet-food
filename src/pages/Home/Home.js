@@ -13,6 +13,8 @@ class Home extends Component {
       restaurantList: [],
       isLoading: true,
       cuisineList: [],
+      isFilterOpen: false,
+      applyFilterVisible: false,
     };
   }
   componentDidMount() {
@@ -61,15 +63,29 @@ class Home extends Component {
         cuisines.toLowerCase().trim().includes(cusine.toLowerCase().trim()) &&
         parseInt(average_cost_for_two, 10) <= parseInt(cost, 10)
       );
-		});
-		
+    });
+
     this.setState({
       restaurantList: restaurants,
+      applyFilterVisible: true,
     });
   };
 
+  toggleFilter = () => {
+    this.setState((prevState) => ({
+      isFilterOpen: !prevState.isFilterOpen,
+      applyFilterVisible: false,
+    }));
+  };
+
   render() {
-    const { restaurantList, isLoading, cusineList } = this.state;
+    const {
+      restaurantList,
+      isLoading,
+      cusineList,
+      isFilterOpen,
+      applyFilterVisible,
+    } = this.state;
 
     const isRestaurantAvailable = !!(
       restaurantList &&
@@ -85,13 +101,36 @@ class Home extends Component {
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-2 col-sm-12">
-              <div className={classnames("", css.filter)}>
+              <div
+                className={classnames("d-none d-sm-block", css.filter_desktop)}
+              >
                 <Filters
                   cusineList={cusineList}
                   handleQuery={this.handleFilter}
                 />
               </div>
             </div>
+            {isFilterOpen && (
+              <div className="col-md-2 col-sm-12 d-sm-block d-md-none">
+                <div className={classnames("", css.filter_mobile)}>
+                  <div className={css.close} onClick={this.toggleFilter}>
+                    Close
+                  </div>
+                  <Filters
+                    cusineList={cusineList}
+                    handleQuery={this.handleFilter}
+                  />
+                  {applyFilterVisible && (
+                    <div
+                      className={classnames("bg-info", css.apply)}
+                      onClick={this.toggleFilter}
+                    >
+                      Apply
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
             <div className="col-md-10 col-sm-12">
               <div className="row">
                 {restaurantList.map((restaurantObj) => {
@@ -112,6 +151,17 @@ class Home extends Component {
               </div>
             </div>
           </div>
+          {!isFilterOpen && (
+            <div
+              className={classnames(
+                "d-sm-block d-md-none bg-info",
+                css.stickyFilter
+              )}
+              onClick={this.toggleFilter}
+            >
+              <spna>FILTER</spna>
+            </div>
+          )}
         </div>
       </React.Fragment>
     );
