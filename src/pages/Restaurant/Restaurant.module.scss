@@ -16,8 +16,10 @@
   .highlights {
     margin: 0px;
     padding: 0px;
+
     li {
       display: inline-flex;
+
       &:before {
         content: "\2022";
         padding-left: 8px;
@@ -33,12 +35,13 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
 
-  .menucategory{
+  .menucategory {
     padding: 10px;
     margin-bottom: 15px;
     background-color: white;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
+
   .categories {
     background: white;
     padding: 10px;
@@ -70,4 +73,52 @@
   background: white;
   width: 100%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.menuWrapper {
+  position: relative;
+  position: fixed;
+  bottom: 10px;
+  right: 5px;
+
+  .categories {
+    position: absolute;
+    bottom: 50px;
+    right: 0px;
+    background: white;
+    padding: 20px;
+    max-height: 400px;
+    overflow: scroll;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    .item {
+      font-size: 1rem;
+      line-height: 1rem;
+      padding: 5px;
+      color: var(--txt-color-lightblack);
+      margin: 5px;
+    }
+
+  }
+
+  button {
+    padding: 10px;
+    background: red;
+
+  }
+}
+
+.checkoutBar{
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  background: yellow;
+  padding: 10px;
+  .itemDetails{
+
+  }
+  .checkout{
+    position: absolute;
+    bottom: 10px;
+    right: 0px;
+  }
 }

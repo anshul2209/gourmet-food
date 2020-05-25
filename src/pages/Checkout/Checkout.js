@@ -15,6 +15,7 @@ const Checkout = (props) => {
 
   return (
     <div className={classnames("container", css.checkoutWrapper)}>
+      <div className={css.close} onClick={props.onClose}>Close</div>
       <header className={classnames("row", css.header)}>
         <div className="col-6">
           <h2>Cart</h2>

@@ -18,6 +18,8 @@ const Restaurant = () => (
 
 const RestaurantDetail = (props) => {
   const [menuItems, setmenuItems] = useState([]);
+  const [isMenuShown, toggleMenuShown] = useState(false);
+  const [isCheckoutShown, toggleCheckoutShown] = useState(false);
   const refs = menuItems
     .map((item) => item.menu)
     .reduce((acc, value) => {
@@ -65,10 +67,11 @@ const RestaurantDetail = (props) => {
     backgroundSize: "contain",
   };
 
-   // eslint-disable-next-line
+  // eslint-disable-next-line
   useEffect(() => loadDailyMenu(), []);
 
   const handleCategorySelect = (event) => {
+    toggleMenuShown(!isMenuShown);
     const id = event.target.id;
     refs[id].current.scrollIntoView({
       behavior: "smooth",
@@ -102,18 +105,23 @@ const RestaurantDetail = (props) => {
     dispatch({ type: "checkout", payload: checkoutItems });
   };
 
-  console.log(state.order);
-
-  const isCheckout = !!Object.values(state.order).length;
+  const itemsNumber = Object.values(state.order).length;
 
   const handleCheckout = () => {
     props.history.push("/confirm");
   };
+
+  const handleClose = () => {
+    console.log('called');
+    toggleCheckoutShown(!!isCheckoutShown);
+  }
+
+  console.log(isCheckoutShown);
   return (
     <React.Fragment>
       <div className={classnames("container-fluid", css.restaurantWrapper)}>
         <div className={classnames("row")}>
-          <div className={classnames(isCheckout ? "col-md-9" : "col-12")}>
+          <div className={classnames(!!itemsNumber ? "col-md-9" : "col-12")}>
             <div className={classnames("row")}>
               <div className="col-sm-12">
                 <div className={css.background} style={featuredDivStyle} />
@@ -141,7 +149,7 @@ const RestaurantDetail = (props) => {
             </div>
             <div className={classnames("row")}>
               <div
-                className={classnames("col-md-2 col-sm-12")}
+                className={classnames("col-md-2 col-sm-12 d-none d-sm-block")}
                 onClick={handleCategorySelect}
               >
                 <div className={css.categories}>
@@ -154,33 +162,57 @@ const RestaurantDetail = (props) => {
                   })}
                 </div>
               </div>
-                <div className={classnames("col-md-10 col-sm-12")}>
-                  <div className={css.menu}>
-                    {menuItems.map((item) => {
-                      return (
-                        <div
-                          className={classnames("col-sm-12", css.menucategory)}
-                          key={item.menu.id}
-                        >
-                          <h5 ref={refs[item.menu.id]}>{item.menu.name}</h5>
-                          <MenuCategory
-                            categoryMenu={item.menu}
-                            handleItemSelection={handleItemSelection}
-                          />
-                        </div>
-                      );
-                    })}
-                  </div>
+              <div className={classnames("col-md-10 col-sm-12")}>
+                <div className={css.menu}>
+                  {menuItems.map((item) => {
+                    return (
+                      <div
+                        className={classnames("col-sm-12", css.menucategory)}
+                        key={item.menu.id}
+                      >
+                        <h5 ref={refs[item.menu.id]}>{item.menu.name}</h5>
+                        <MenuCategory
+                          categoryMenu={item.menu}
+                          handleItemSelection={handleItemSelection}
+                        />
+                      </div>
+                    );
+                  })}
                 </div>
+              </div>
             </div>
           </div>
-          <div className={classnames(isCheckout ? "col-md-3" : "d-none")}>
+          <div className={classnames(!!itemsNumber ? "col-md-3" : "d-none")}>
             <div className={css.checkout}>
               <Checkout handleCheckout={handleCheckout} />
             </div>
           </div>
         </div>
       </div>
+      <div className={css.menuWrapper}>
+        {isMenuShown && (
+          <div className={css.categories} onClick={handleCategorySelect}>
+            {menuItems.map((item) => {
+              return (
+                <div className={css.item} id={item.menu.id}>
+                  {item.menu.name}
+                </div>
+              );
+            })}
+          </div>
+        )}
+        <button onClick={() => toggleMenuShown(!isMenuShown)}>Menu</button>
+      </div>
+      {!!itemsNumber && (
+        <div className={css.checkoutBar} onClick={() => toggleCheckoutShown(!isCheckoutShown)}>
+          <div className={css.itemDetails}>{itemsNumber}</div>
+          {isCheckoutShown && (
+            <div className={css.checkout}>
+              <Checkout handleCheckout={handleCheckout} onClose={handleClose} />
+            </div>
+          )}
+        </div>
+      )}
     </React.Fragment>
   );
 };
