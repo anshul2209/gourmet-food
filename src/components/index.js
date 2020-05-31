@@ -3,11 +3,13 @@ import RestaurantTile from './RestaurantTile/RestaurantTile';
 import Loader from './Loader/Loader';
 import Animate from './Animate/Animate';
 import MenuCategory from './MenuItem/MenuItem';
+import CheckoutItems from './CheckoutItems/CheckoutItems';
 
 export {
     Filters,
     RestaurantTile,
     Loader,
     Animate,
-    MenuCategory
+    MenuCategory,
+    CheckoutItems
 };

@@ -1,19 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import classnames from "classnames";
 import { Loader } from "../../components";
-
+import { getItemsQuantity } from "../../helpers/checkout";
 import css from "./Confirmation.module.scss";
 import OrderContext from "../../OrderProvider";
 
-const Confirmation = (props) => {
+const Confirmation = () => {
   const [isLoading, toggleIsLoading] = useState(true);
-  const { state } = useContext(OrderContext);
-  const items = Object.values(state.order || {});
-  const add = (acc, current) => acc + current;
-  const total = parseInt(
-    items.map((item) => item.price * item.quantity).reduce(add, 0),
-    10
-  );
+  const {
+    state: { order },
+  } = useContext(OrderContext);
+  const total = getItemsQuantity(order);
 
   useEffect(() => {
     const timer = setTimeout(() => {

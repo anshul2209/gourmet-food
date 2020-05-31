@@ -76,10 +76,10 @@
 }
 
 .menuWrapper {
-  position: relative;
   position: fixed;
-  bottom: 10px;
-  right: 5px;
+  bottom: 50px;
+  right: 10px;
+  z-index: 2;
 
   .categories {
     position: absolute;
@@ -90,6 +90,7 @@
     max-height: 400px;
     overflow: scroll;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
     .item {
       font-size: 1rem;
       line-height: 1rem;
@@ -101,24 +102,30 @@
   }
 
   button {
-    padding: 10px;
     background: red;
 
   }
 }
 
-.checkoutBar{
+
+
+.checkoutBar {
   position: fixed;
   bottom: 0px;
   width: 100%;
-  background: yellow;
-  padding: 10px;
-  .itemDetails{
 
+  .itemDetails {
+    background: yellow;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-  .checkout{
-    position: absolute;
-    bottom: 10px;
-    right: 0px;
+
+  .checkout {
+    background: red;
+    height: 300px;
+    position: static;
   }
+
 }

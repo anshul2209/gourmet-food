@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Switch, Route } from "react-router-dom";
-import { MenuCategory } from "../../components";
+import { MenuCategory, CheckoutItems } from "../../components";
+import { getItemsQuantity, getAmount } from "../../helpers/checkout";
 import axios from "axios";
 import { host_url } from "../../config";
 import classnames from "classnames";
@@ -78,10 +79,15 @@ const RestaurantDetail = (props) => {
       block: "start",
     });
   };
-  const { state, dispatch } = useContext(OrderContext);
+  const {
+    state: { order },
+    dispatch,
+  } = useContext(OrderContext);
+
+  const items = Object.values(order || {});
 
   const handleItemSelection = (item, action) => {
-    const checkoutItems = { ...state.order };
+    const checkoutItems = { ...order };
     const orderItem = checkoutItems[item.id];
 
     if (orderItem) {
@@ -105,17 +111,18 @@ const RestaurantDetail = (props) => {
     dispatch({ type: "checkout", payload: checkoutItems });
   };
 
-  const itemsNumber = Object.values(state.order).length;
+  const itemsNumber = getItemsQuantity(order);
+  const amount = getAmount(order);
 
   const handleCheckout = () => {
     props.history.push("/confirm");
   };
 
   const handleClose = () => {
-    console.log('called');
     toggleCheckoutShown(!!isCheckoutShown);
-  }
+  };
 
+  const showCheckout = isCheckoutShown && !!itemsNumber;
   console.log(isCheckoutShown);
   return (
     <React.Fragment>
@@ -184,35 +191,47 @@ const RestaurantDetail = (props) => {
           </div>
           <div className={classnames(!!itemsNumber ? "col-md-3" : "d-none")}>
             <div className={css.checkout}>
-              <Checkout handleCheckout={handleCheckout} />
+              <Checkout
+                handleCheckout={handleCheckout}
+                handleClose={handleClose}
+              />
             </div>
           </div>
         </div>
       </div>
-      <div className={css.menuWrapper}>
-        {isMenuShown && (
-          <div className={css.categories} onClick={handleCategorySelect}>
-            {menuItems.map((item) => {
-              return (
-                <div className={css.item} id={item.menu.id}>
-                  {item.menu.name}
-                </div>
-              );
-            })}
-          </div>
-        )}
-        <button onClick={() => toggleMenuShown(!isMenuShown)}>Menu</button>
-      </div>
-      {!!itemsNumber && (
-        <div className={css.checkoutBar} onClick={() => toggleCheckoutShown(!isCheckoutShown)}>
-          <div className={css.itemDetails}>{itemsNumber}</div>
-          {isCheckoutShown && (
-            <div className={css.checkout}>
-              <Checkout handleCheckout={handleCheckout} onClose={handleClose} />
+      <div className={"d-sm-block d-md-none"}>
+        <div className={css.menuWrapper}>
+          {isMenuShown && (
+            <div className={css.categories} onClick={handleCategorySelect}>
+              {menuItems.map((item) => {
+                return (
+                  <div className={css.item} id={item.menu.id}>
+                    {item.menu.name}
+                  </div>
+                );
+              })}
             </div>
           )}
+          <button onClick={() => toggleMenuShown(!isMenuShown)}>Menu</button>
         </div>
-      )}
+        {!!itemsNumber && (
+          <div className={css.checkoutBar}>
+            {isCheckoutShown && (
+              <div className={css.checkout}>
+                <CheckoutItems items={items} />
+              </div>
+            )}
+            <div className={css.itemDetails}>
+              <span
+                className={css.quantity}
+                onClick={() => toggleCheckoutShown(!isCheckoutShown)}
+              >{`${itemsNumber} Items `}</span>
+              <span className={css.amount}>{`Rs ${amount} `}</span>
+              <button onClick={handleCheckout}>Checkout</button>
+            </div>
+          </div>
+        )}
+      </div>
     </React.Fragment>
   );
 };

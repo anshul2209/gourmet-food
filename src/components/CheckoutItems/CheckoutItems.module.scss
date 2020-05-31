@@ -1,0 +1,31 @@
+.orderDetails {
+  .order {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 50px;
+
+    .name {
+      font-size: 0.9rem;
+      font-weight: 400;
+
+    }
+
+    .subtotal {
+      font-size: 0.8rem;
+
+      font-weight: bold;
+    }
+
+  }
+
+  .quantity {
+    font-size: 0.8rem;
+
+  }
+
+  .price {
+    font-size: 0.8rem;
+
+  }
+}
