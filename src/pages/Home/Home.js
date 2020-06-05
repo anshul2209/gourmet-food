@@ -114,7 +114,7 @@ class Home extends Component {
               <div className="col-md-2 col-sm-12 d-sm-block d-md-none">
                 <div className={classnames("", css.filter_mobile)}>
                   <div className={css.close} onClick={this.toggleFilter}>
-                    Close
+                    <i className="fa fa-times-circle" aria-hidden="true"></i>
                   </div>
                   <Filters
                     cusineList={cusineList}
@@ -136,7 +136,7 @@ class Home extends Component {
                 {restaurantList.map((restaurantObj) => {
                   return (
                     <div
-                      className="col-md-3 col-sm-12 mb-3"
+                      className="col-md-4 col-sm-12 mb-4"
                       key={restaurantObj.restaurant.id}
                     >
                       <Animate in={isRestaurantAvailable}>
@@ -159,7 +159,7 @@ class Home extends Component {
               )}
               onClick={this.toggleFilter}
             >
-              <spna>FILTER</spna>
+              <span>FILTER</span>
             </div>
           )}
         </div>

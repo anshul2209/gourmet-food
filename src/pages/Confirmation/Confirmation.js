@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import classnames from "classnames";
 import { Loader } from "../../components";
-import { getItemsQuantity } from "../../helpers/checkout";
+import { getAmount } from "../../helpers/checkout";
 import css from "./Confirmation.module.scss";
 import OrderContext from "../../OrderProvider";
 
@@ -9,14 +9,24 @@ const Confirmation = () => {
   const [isLoading, toggleIsLoading] = useState(true);
   const {
     state: { order },
+    dispatch,
   } = useContext(OrderContext);
-  const total = getItemsQuantity(order);
+  const total = getAmount(order);
+
+  async function placeOrder() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        dispatch({ type: "resetCheckout" });
+        resolve(toggleIsLoading(false));
+      }, 5000);
+    });
+  }
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      toggleIsLoading(false);
-    }, 5000);
-    return () => clearTimeout(timer);
+    async function getData() {
+      await placeOrder();
+    }
+    getData();
   }, []);
 
   if (isLoading) {
@@ -25,15 +35,15 @@ const Confirmation = () => {
     return (
       <div className={classnames("container-fluid")}>
         <div className={classnames("row", css.wrapper)}>
-          <div className={classnames("col-md-8 my-auto")}>
+          <div className={classnames("col-md-8 col-sm-12 my-auto")}>
             <div className={css.confirm} />
           </div>
-          <div className={classnames("col-4 my-auto")}>
+          <div className={classnames("col-md-4 col-sm-12 my-auto")}>
             <div className={css.orderDetails}>
-              <h1>Tasty Food Enroute!</h1>
-              <h2>
+              <h2>Tasty Food Enroute!</h2>
+              <h4>
                 Please pay the delivery agent <span>Rs {total}</span>{" "}
-              </h2>
+              </h4>
             </div>
           </div>
         </div>

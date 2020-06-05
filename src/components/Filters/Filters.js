@@ -36,7 +36,7 @@ export default class Filters extends React.PureComponent {
           <div onChange={this.handleFilter}>
             {cost.map((item) => {
               return (
-                <div className="form-check">
+                <div className="form-check" key={item}>
                   <label className="form-check-label">
                     <input
                       type="radio"
@@ -59,7 +59,7 @@ export default class Filters extends React.PureComponent {
           >
             {ratings.map((rating) => {
               return (
-                <div className="form-check">
+                <div className="form-check" key={rating}>
                   <label className="form-check-label">
                     <input
                       type="radio"
@@ -82,7 +82,7 @@ export default class Filters extends React.PureComponent {
           >
             {cusineList.map((cusine) => {
               return (
-                <div className="form-check">
+                <div className="form-check" key={cusine}>
                   <label className="form-check-label">
                     <input
                       type="radio"

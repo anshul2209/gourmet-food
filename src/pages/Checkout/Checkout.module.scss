@@ -1,4 +1,5 @@
 .checkoutWrapper {
+
   // width: 100%;
   // max-width: 600px;
   // position: absolute;
@@ -7,7 +8,15 @@
   // transform: translate(-50%, -50%);
   // z-index: 2;
   // background: white;
+  .close {
+    padding: 10px;
+    cursor: pointer;
+    text-align: right;
+    font-size: 2rem;
+  }
+
   height: 100vh;
+
   .header {
     padding: 5px;
     display: flex;
@@ -15,12 +24,20 @@
     justify-content: space-between;
   }
 
-  
+  .order{
+    .subtotal{
+      font-weight: bold;
+      font-size: 1rem;
+    }
+  }
 
-  .checkout{
+
+  .checkout {
     padding: 10px;
     text-align: center;
-    button{
+    font-weight: bold;
+
+    button {
       padding: 5px 10px;
     }
   }

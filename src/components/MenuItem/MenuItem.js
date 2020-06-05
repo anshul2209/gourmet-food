@@ -31,7 +31,7 @@ const MenuItem = (props) => {
           <span className={css.price}>Rs. {item.price || item.min_price}</span>
           <span className={css.price}>
             {quantity === 0 && (
-              <button onClick={() => handleAddClick(item)}>Add</button>
+              <button className="btn btn-secondary" onClick={() => handleAddClick(item)}>Add</button>
             )}
             {!(quantity === 0) && (
               <div className={css.edit}>

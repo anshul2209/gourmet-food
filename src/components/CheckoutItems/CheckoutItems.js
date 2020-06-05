@@ -4,11 +4,11 @@ import classnames from "classnames";
 
 export default function CheckoutItems({ items }) {
   return (
-    <section className={classnames("container", css.orderDetails)}>
+    <section>
       {items.map((itm) => {
         const { name, quantity, price } = itm;
         return (
-          <div className={classnames("row", css.order)}>
+          <div className={classnames(css.order, "row")} key={name}>
             <div className="col-10">
               <span className={css.name}>{name}</span>
             </div>

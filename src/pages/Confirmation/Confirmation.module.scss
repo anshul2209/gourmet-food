@@ -8,4 +8,9 @@
     height: 800px;
     background-position: bottom;
   }
+  @media only screen and (max-width: 600px) {
+    .confirm{
+      height: 400px;
+    }
+  }
 }

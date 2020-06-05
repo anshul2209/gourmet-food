@@ -7,30 +7,35 @@
     text-align: center;
     cursor: pointer;
     background-color: white;
+    img{
+        height: 200px;
+        width: 200px;
+    }
 }
 
 .name{
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: 500;
     word-break: break-word; 
 }
 
 .cuisnes{
-    font-size: 0.8rem;
+    font-size: 1rem;
     margin-top: 4px;
     height: 30px;
 }
 
+
 .cost{
     display: flex;
-    font-size: 0.8rem;
+    font-size: 1rem;
     justify-content: space-between;
     align-items: center;
 }
 
 .timings{
     border-top: 1px solid #e9e9eb;
-    font-size: 0.8rem;
+    font-size: 1rem;
     margin: 4px;
     padding: 5px;
 }

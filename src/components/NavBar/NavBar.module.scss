@@ -1,0 +1,20 @@
+.cart {
+  font-size: 2rem;
+  padding: 0px 10px;
+  cursor: pointer;
+  position: relative;
+  right: 20px;
+  .quantity{
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    background: red;
+    padding: 5px;
+    position: absolute;
+    text-align: center;
+    line-height: 20px;
+    font-size: 1.2rem;
+    color: white;
+    bottom: 25px;
+  }
+}

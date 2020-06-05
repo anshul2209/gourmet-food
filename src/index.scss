@@ -10,8 +10,16 @@
 
 html, body {
   height: 100%;
-  background: url('./background.jpg');
+  background: #f3f3f3; //url('./background.jpg');
   background-size: 100px;
+}
+html{
+  font-size: 16px;
+}
+@media only screen and (max-width: 600px) {
+  html{
+    font-size: 14px;
+  }
 }
 
 code {

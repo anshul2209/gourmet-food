@@ -9,8 +9,26 @@
 
   .name {
     white-space: nowrap;
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 700;
+  }
+
+  .rating {}
+
+  .cusines {
+    font-size: 1rem;
+    // color: rgb(130, 130, 130);
+  }
+
+  .address {
+    font-size: 1rem;
+    color: rgb(156, 156, 156);
+  }
+
+  .timing {
+    font-size: 1rem;
+    color: rgb(130, 130, 130);
+
   }
 
   .highlights {
@@ -33,6 +51,7 @@
     padding: 10px 0px;
     margin: 0px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 10px;
   }
 
   .menucategory {
@@ -75,11 +94,16 @@
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.menuWrapper {
+.bottomBar {
   position: fixed;
-  bottom: 50px;
-  right: 10px;
+  bottom: 0px;
   z-index: 2;
+  width: 100%;
+}
+
+.menuWrapper {
+  text-align: right;
+  padding: 5px 10px;
 
   .categories {
     position: absolute;
@@ -102,17 +126,25 @@
   }
 
   button {
-    background: red;
+    width: 8.6rem;
+    height: 3.6rem;
+    border-radius: 6.6rem;
+    border-width: 0.5px;
+    border-style: solid;
+    border-color: rgb(105, 105, 105);
+    background: rgb(248, 248, 248);
+    padding: 0px;
 
+    i {
+      margin-right: 10px;
+    }
   }
 }
 
 
 
 .checkoutBar {
-  position: fixed;
-  bottom: 0px;
-  width: 100%;
+
 
   .itemDetails {
     background: yellow;

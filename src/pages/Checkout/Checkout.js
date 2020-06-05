@@ -15,23 +15,25 @@ const Checkout = (props) => {
 
   return (
     <div className={classnames("container", css.checkoutWrapper)}>
-      <div className={css.close} onClick={props.handleClose}>
-        Close
-      </div>
       <header className={classnames("row", css.header)}>
         <div className="col-6">
-          <h2>Cart</h2>
+          <h3>Cart</h3>
         </div>
-        <div className="col-6">
+        <div className="col-4">
           <span>{`${itemQuantity} items`}</span>
+        </div>
+        <div className="col-2">
+          <div className={css.close} onClick={props.handleClose}>
+            <i className="fa fa-times-circle" aria-hidden="true"></i>
+          </div>
         </div>
       </header>
       <CheckoutItems items={items} />
       <div className={classnames(css.order, "row")}>
-        <div className="col-8">
+        <div className="col-9">
           <h6>Subtotal</h6>
         </div>
-        <div className="col-4">
+        <div className="col-3">
           <span className={css.subtotal}>Rs. {total}</span>
         </div>
       </div>

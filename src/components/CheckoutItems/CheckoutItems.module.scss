@@ -1,31 +1,20 @@
-.orderDetails {
-  .order {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 50px;
+.order {
 
-    .name {
-      font-size: 0.9rem;
-      font-weight: 400;
+  margin-bottom: 10px;
 
-    }
-
-    .subtotal {
-      font-size: 0.8rem;
-
-      font-weight: bold;
-    }
-
+  .name {
+    font-size: 1rem;
+    font-weight: 400;
   }
 
   .quantity {
-    font-size: 0.8rem;
+    font-size: 1rem;
 
   }
 
   .price {
-    font-size: 0.8rem;
-
+    font-size: 1rem;
+    font-weight: bold;
   }
+
 }

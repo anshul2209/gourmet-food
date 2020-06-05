@@ -1,5 +1,6 @@
 import React from 'react';
 import './RestaurantTile.scss';
+import food_image_placeholder from "../../foodplaceholder.png";
 
 
 export default class RestaurantTile extends React.PureComponent {
@@ -14,7 +15,7 @@ export default class RestaurantTile extends React.PureComponent {
         }
         return(
             <div className="tile" onClick={this.handleClick(restaurant)}>
-                <img src={restaurant.thumb} alt="restraunt_pic" />
+                <img src={restaurant.thumb || food_image_placeholder} alt="restraunt_pic" />
                 <div className="details">
                     <p className="name">{restaurant.name}</p>
                     <p className="cuisnes">{restaurant.cuisines}</p>
