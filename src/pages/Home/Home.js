@@ -9,7 +9,7 @@ import css from "./Home.module.scss";
 import classnames from "classnames";
 
 const Home = (props) => {
-  let allRestaurants = [];
+  const [allRestaurants, setAllRestaurants] = useState([]);
   const [restaurantList, setRestaurantsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [cusineList, setcuisineList] = useState([]);
@@ -39,7 +39,7 @@ const Home = (props) => {
         (rest) => rest.restaurant.cuisines.split(", ") // get array of arrays
       );
 
-      allRestaurants = restaurantList;
+      setAllRestaurants(restaurantList)
       setRestaurantsList(restaurantList);
       setIsLoading(false);
       setcuisineList([...new Set([].concat(...cuisineList))]);
@@ -56,7 +56,6 @@ const Home = (props) => {
 
   const handleFilter = (query) => {
     const { rating, cost, cusine } = query;
-
     const restaurants = allRestaurants.filter((item) => {
       const { restaurant } = item;
       const { cuisines, user_rating, average_cost_for_two } = restaurant;
