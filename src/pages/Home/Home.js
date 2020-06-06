@@ -45,7 +45,7 @@ const Home = (props) => {
     const temp_path = restaurant.url.split("?")[0].split(host_url);
     const restaurantDetailUrl = temp_path[1];
 
-    props.history.push(`/restaurants/${restaurantDetailUrl}`);
+    props.history.push(`/restaurants${restaurantDetailUrl}`);
     dispatch({ type: "selectRestaurant", payload: restaurant });
   };
 
