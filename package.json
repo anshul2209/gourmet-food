@@ -24,8 +24,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start:server": "nodemon server.js",
-    "start": "node server.js",
-    "heroku-postbuild": "npm install && npm run build",
+    "start": "npm run start:server",
+    "heroku-postbuild": "npm run build",
     "start:dev": "concurrently \"npm run start:server\" \"npm run start:client\""
   },
   "eslintConfig": {
@@ -45,5 +45,9 @@
   },
   "devDependencies": {
     "concurrently": "^5.2.0"
+  },
+  "engines": {
+    "node": ">=10 <11",
+    "yarn": ">=1.10"
   }
 }
