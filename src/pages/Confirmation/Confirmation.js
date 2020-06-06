@@ -9,14 +9,12 @@ const Confirmation = () => {
   const [isLoading, toggleIsLoading] = useState(true);
   const {
     state: { order },
-    dispatch,
   } = useContext(OrderContext);
   const total = getAmount(order);
 
   async function placeOrder() {
     return new Promise((resolve) => {
       setTimeout(() => {
-        dispatch({ type: "resetCheckout" });
         resolve(toggleIsLoading(false));
       }, 5000);
     });

@@ -25,14 +25,10 @@ export default class Filters extends React.PureComponent {
   };
   render() {
     const { cusineList } = this.props;
-
-    // if(!cusineList?.length) {
-    //     return null;
-    // }
     return (
       <div className={classnames(css.wrap)}>
         <div className={classnames(css.cusineFilter)}>
-          <h5>Cost For Two</h5>
+          <h4>Cost For Two</h4>
           <div onChange={this.handleFilter}>
             {cost.map((item) => {
               return (
@@ -52,7 +48,7 @@ export default class Filters extends React.PureComponent {
           </div>
         </div>
         <div className={classnames(css.cusineFilter)}>
-          <h5>Ratings</h5>
+          <h4>Ratings</h4>
           <div
             className={classnames(css.cusineFilter)}
             onChange={this.handleFilter}
@@ -75,7 +71,7 @@ export default class Filters extends React.PureComponent {
           </div>
         </div>
         <div className={classnames(css.cusineFilter)}>
-          <h5>Cuisines</h5>
+          <h4>Cuisines</h4>
           <div
             className={classnames(css.cusineFilter)}
             onChange={this.handleFilter}

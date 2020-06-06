@@ -20,11 +20,19 @@
       align-self: center;
       justify-content: space-between;
       padding: 5px 0px;
-      .edit{
+      .price{
+        button{
+          border: 1px solid;
+        }
+      }
+
+      .edit {
         border: 1px solid var(--txt-color-lightblack);
-        padding: 0px 5px;
+        padding: 5px;
+        border-radius: 20px;
         cursor: pointer;
-        span{
+
+        span {
           margin: 0px 5px;
         }
       }

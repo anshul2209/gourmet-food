@@ -16,10 +16,10 @@ const Checkout = (props) => {
   return (
     <div className={classnames("container", css.checkoutWrapper)}>
       <header className={classnames("row", css.header)}>
-        <div className="col-6">
+        <div className="col-5">
           <h3>Cart</h3>
         </div>
-        <div className="col-4">
+        <div className="col-5">
           <span>{`${itemQuantity} items`}</span>
         </div>
         <div className="col-2">
@@ -30,15 +30,15 @@ const Checkout = (props) => {
       </header>
       <CheckoutItems items={items} />
       <div className={classnames(css.order, "row")}>
-        <div className="col-9">
+        <div className="col-7">
           <h6>Subtotal</h6>
         </div>
-        <div className="col-3">
+        <div className="col-5">
           <span className={css.subtotal}>Rs. {total}</span>
         </div>
       </div>
       <div className={css.checkout}>
-        <button onClick={props.handleCheckout}>Checkout</button>
+        <button className={classnames("btn", css.checkoutBtn)} onClick={props.handleCheckout}>Checkout</button>
       </div>
     </div>
   );

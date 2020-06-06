@@ -7,7 +7,8 @@ import { Route, Switch } from "react-router-dom";
 const App = () => {
   const initialState = {
     order: {},
-    isCheckoutOpen: false
+    isCheckoutOpen: false,
+    restaurant: {}
   };
 
   let reducer = (state = initialState, action) => {
@@ -18,8 +19,8 @@ const App = () => {
       case "toggleCheckout": {
         return { ...state, isCheckoutOpen: action.payload };
       }
-      case "resetCheckout": {
-        return state;
+      case "selectRestaurant": {
+        return { ...state, restaurant: action.payload }
       }
       default:
         return state;
@@ -35,7 +36,7 @@ const App = () => {
       <main>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/restaurants" component={Restaurant} />
+          <Route path="/restaurants/:region/:name" component={Restaurant} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/confirm" component={Confirmation} />
         </Switch>

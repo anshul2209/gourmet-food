@@ -54,12 +54,18 @@
     margin-bottom: 10px;
   }
 
-  .menucategory {
-    padding: 10px;
-    margin-bottom: 15px;
-    background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  .menu {
+    box-shadow: -10px 0px 10px 1px rgba(0, 0, 0, 0.19);
+
+    .menucategory {
+      padding: 10px;
+      // margin-bottom: 15px;
+      background-color: white;
+      // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    }
   }
+
 
   .categories {
     background: white;
@@ -80,19 +86,20 @@
       &:hover {
         color: var(--txt-color-black);
         font-weight: 400;
-        border-left: 2px solid red;
+        border-left: 2px solid #ED4337;
       }
     }
   }
+
+  .checkout {
+    position: sticky;
+    top: 80px;
+    background: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
 }
 
-.checkout {
-  position: sticky;
-  top: 80px;
-  background: white;
-  width: 100%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
+
 
 .bottomBar {
   position: fixed;
@@ -126,9 +133,9 @@
   }
 
   button {
-    width: 8.6rem;
-    height: 3.6rem;
-    border-radius: 6.6rem;
+    width: 7rem;
+    height: 3rem;
+    border-radius: 6rem;
     border-width: 0.5px;
     border-style: solid;
     border-color: rgb(105, 105, 105);
@@ -147,17 +154,30 @@
 
 
   .itemDetails {
-    background: yellow;
+    background: #fefefe;
     padding: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    .checkoutBtn {
+      background: #ED4337;
+      color: white;
+    }
   }
 
   .checkout {
-    background: red;
     height: 300px;
     position: static;
+    overflow: auto;
+    background: white;
+
+    .checkoutHeader {
+      padding: 10px 0px;
+      background: #f3f3f3;
+      margin-bottom: 10px;
+    }
   }
 
 }

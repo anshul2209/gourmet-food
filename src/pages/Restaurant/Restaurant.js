@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Switch, Route } from "react-router-dom";
 import { MenuCategory, CheckoutItems, Loader } from "../../components";
 import { getItemsQuantity, getAmount } from "../../helpers/checkout";
 import axios from "axios";
@@ -10,14 +9,7 @@ import Checkout from "../Checkout/Checkout";
 
 import css from "./Restaurant.module.scss";
 
-const Restaurant = () => (
-  <Switch>
-    <Route exact path="/restaurants" component={DefaultRestaurant} />
-    <Route path="/restaurants/:restaurant_id" component={RestaurantDetail} />
-  </Switch>
-);
-
-const RestaurantDetail = (props) => {
+const Restaurant = (props) => {
   const {
     state: { order, isCheckoutOpen },
     dispatch,
@@ -29,6 +21,14 @@ const RestaurantDetail = (props) => {
   const [menuItems, setmenuItems] = useState([]);
   const [isMenuShown, toggleMenuShown] = useState(false);
   const [isMenuLoading, toggleMenuLoading] = useState(true);
+  const [restaurant, setRestaurant] = useState({
+    cuisine_string: "",
+    name: "",
+    rating: {},
+    timing: {},
+    address: "",
+    res_thumb: ""
+  });
 
   const refs = menuItems
     .map((item) => item.menu)
@@ -38,14 +38,11 @@ const RestaurantDetail = (props) => {
     }, {});
 
   const {
-    location: {
-      state: { restaurant },
+    match: {
+      params: { region, name },
     },
   } = props;
-
-  const { name, url, featured_image, user_rating } = restaurant;
-  const temp_path = url.split("?")[0].split(host_url);
-  const restraunts_details_url = `${host_url}webroutes/getPage?page_url=${temp_path[1]}/order&location=&isMobile=0`;
+  const restraunts_details_url = `${host_url}webroutes/getPage?page_url=${region}/${name}/order&location=&isMobile=0`;
 
   const loadDailyMenu = async () => {
     const response = await axios
@@ -59,9 +56,13 @@ const RestaurantDetail = (props) => {
             order: {
               menuList: { menus },
             },
+            sections: { SECTION_BASIC_INFO, SECTION_RES_CONTACT },
           },
         },
       } = response;
+      const { cuisine_string, name, rating, timing, res_thumb } = SECTION_BASIC_INFO;
+      const { address } = SECTION_RES_CONTACT;
+      setRestaurant({ cuisine_string, name, rating, timing, address, res_thumb });
       setmenuItems(menus);
       toggleMenuLoading(!isMenuLoading);
     }
@@ -82,7 +83,7 @@ const RestaurantDetail = (props) => {
     if (id && refs[id]) {
       refs[id].current.scrollIntoView({
         behavior: "smooth",
-        block: "start",
+        block: "center",
       });
     }
   };
@@ -122,13 +123,13 @@ const RestaurantDetail = (props) => {
 
   // Local Styles
   const ratingStyle = {
-    background: `#${user_rating?.rating_color}`,
+    background: `#${restaurant.rating?.rating_color}`,
     padding: "5px",
     margin: "5px 0px",
     width: "fit-content",
   };
   const featuredDivStyle = {
-    backgroundImage: `url(${featured_image})`,
+    backgroundImage: `url(${restaurant.res_thumb})`,
     backgroundSize: "contain",
   };
 
@@ -141,7 +142,7 @@ const RestaurantDetail = (props) => {
     <React.Fragment>
       <div className={classnames("container-fluid", css.restaurantWrapper)}>
         <div className={classnames("row")}>
-          <div className={classnames(showCheckout ? "col-md-9" : "col-12")}>
+          <div className={classnames(showCheckout ? "col-md-10" : "col-12")}>
             <div className={classnames("row")}>
               <div className="col-sm-12">
                 <div className={css.background} style={featuredDivStyle} />
@@ -151,28 +152,32 @@ const RestaurantDetail = (props) => {
               <div className={classnames("col-12")}>
                 <div className="row">
                   <div className="col-10">
-                    <div className={css.name}>{name}</div>
+                    <div className={css.name}>{restaurant.name}</div>
                   </div>
                   <div className="col-2">
                     <div style={ratingStyle}>
-                      {user_rating?.aggregate_rating}
+                      {restaurant.rating?.aggregate_rating}
                     </div>
-                    <div>{user_rating?.rating_text}</div>
+                    <div>{restaurant.rating?.rating_subtitle}</div>
                   </div>
                 </div>
               </div>
               <div className={classnames("col-12")}>
                 <div className="row">
                   <div className="col-12">
-                    <div className={css.cusines}>{restaurant.cuisines}</div>
-                  </div>
-                  <div className="col-12">
-                    <div className={css.address}>
-                      {restaurant.location.address}
+                    <div className={css.cusines}>
+                      {restaurant.cuisine_string}
                     </div>
                   </div>
                   <div className="col-12">
-                    <div className={css.timing}>{restaurant.timings}</div>
+                    <div className={css.address}>
+                      {restaurant.address}
+                    </div>
+                  </div>
+                  <div className="col-12">
+                    <div className={css.timing}>
+                      {restaurant.timing?.timing_desc}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -216,7 +221,7 @@ const RestaurantDetail = (props) => {
               </div>
             </div>
           </div>
-          <div className={classnames(showCheckout ? "col-md-3" : "d-none")}>
+          <div className={classnames(showCheckout ? "col-md-2" : "d-none")}>
             <div className={css.checkout}>
               <Checkout
                 handleCheckout={handleCheckout}
@@ -250,19 +255,47 @@ const RestaurantDetail = (props) => {
           </button>
         </div>
         {!!itemsNumber && (
-          <div className={css.checkoutBar}>
+          <div className={classnames(css.checkoutBar)}>
             {isCheckoutOpen && (
-              <div className={css.checkout}>
+              <div className={classnames("container-fluid", css.checkout)}>
+                <div className={classnames("row", css.checkoutHeader)}>
+                  <div className={"col-10"}>
+                    <h3>Your Orders</h3>
+                  </div>
+                  <div className={"col-2"}>
+                    <span>Close</span>
+                  </div>
+                </div>
                 <CheckoutItems items={items} />
               </div>
             )}
-            <div className={css.itemDetails}>
-              <span
-                className={css.quantity}
-                onClick={handleClose}
-              >{`${itemsNumber} Items `}</span>
-              <span className={css.amount}>{`Rs ${amount} `}</span>
-              <button onClick={handleCheckout}>Checkout</button>
+            <div className={"container-fluid"}>
+              <div className={classnames("row", css.itemDetails)}>
+                <div className="col-4">
+                  <div className={css.quantity}>
+                    <span onClick={handleClose}>{`${itemsNumber} Items `}</span>
+                    <span>
+                      <i
+                        className={classnames(
+                          "fas",
+                          isCheckoutOpen ? "fa-sort-down" : "fa-sort-up"
+                        )}
+                      ></i>
+                    </span>
+                  </div>
+                </div>
+                <div className="col-4">
+                  <span className={css.amount}>{`Rs ${amount} `}</span>
+                </div>
+                <div className="col-4">
+                  <button
+                    className={classnames("btn", css.checkoutBtn)}
+                    onClick={handleCheckout}
+                  >
+                    Checkout
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -270,7 +303,5 @@ const RestaurantDetail = (props) => {
     </React.Fragment>
   );
 };
-
-const DefaultRestaurant = () => null;
 
 export default Restaurant;
