@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
-import { RestaurantTile, Loader, Animate, Filters } from "../../components";
 import axios from "axios";
-import { restraunts_url } from "../../config";
+import { RestaurantTile, Loader, Animate, Filters } from "../../components";
+import { apiEndpoint } from "../../config";
 import OrderContext from "../../OrderProvider";
 import { host_url } from "../../config";
 
@@ -26,12 +26,7 @@ const Home = (props) => {
   }, []);
 
   const loadRestaurants = async () => {
-    const headers = {
-      "user-key": process.env.REACT_APP_USER_KEY,
-    };
-    const response = await axios
-      .get(restraunts_url, { headers })
-      .catch((err) => console.error(`axios error is ${err.message}`));
+    const response = await axios.get(`${apiEndpoint}/api/allrestaurants`);
 
     if (response) {
       const restaurantList = response.data.restaurants;
@@ -39,7 +34,7 @@ const Home = (props) => {
         (rest) => rest.restaurant.cuisines.split(", ") // get array of arrays
       );
 
-      setAllRestaurants(restaurantList)
+      setAllRestaurants(restaurantList);
       setRestaurantsList(restaurantList);
       setIsLoading(false);
       setcuisineList([...new Set([].concat(...cuisineList))]);

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { MenuCategory, CheckoutItems, Loader } from "../../components";
 import { getItemsQuantity, getAmount } from "../../helpers/checkout";
 import axios from "axios";
-import { host_url } from "../../config";
+import { apiEndpoint } from "../../config";
 import classnames from "classnames";
 import OrderContext from "../../OrderProvider";
 import Checkout from "../Checkout/Checkout";
@@ -27,7 +27,7 @@ const Restaurant = (props) => {
     rating: {},
     timing: {},
     address: "",
-    res_thumb: ""
+    res_thumb: "",
   });
 
   const refs = menuItems
@@ -42,13 +42,13 @@ const Restaurant = (props) => {
       params: { region, name },
     },
   } = props;
-  const restraunts_details_url = `${host_url}webroutes/getPage?page_url=${region}/${name}/order&location=&isMobile=0`;
 
   const loadDailyMenu = async () => {
     const response = await axios
-      .get(`${restraunts_details_url}`)
+      .get(`${apiEndpoint}/api/restaurant?region=${region}&name=${name}`)
       .catch((err) => console.error(`axios error is ${err.message}`));
 
+    console.log({ response });
     if (response) {
       const {
         data: {
@@ -60,9 +60,22 @@ const Restaurant = (props) => {
           },
         },
       } = response;
-      const { cuisine_string, name, rating, timing, res_thumb } = SECTION_BASIC_INFO;
+      const {
+        cuisine_string,
+        name,
+        rating,
+        timing,
+        res_thumb,
+      } = SECTION_BASIC_INFO;
       const { address } = SECTION_RES_CONTACT;
-      setRestaurant({ cuisine_string, name, rating, timing, address, res_thumb });
+      setRestaurant({
+        cuisine_string,
+        name,
+        rating,
+        timing,
+        address,
+        res_thumb,
+      });
       setmenuItems(menus);
       toggleMenuLoading(!isMenuLoading);
     }
@@ -170,9 +183,7 @@ const Restaurant = (props) => {
                     </div>
                   </div>
                   <div className="col-12">
-                    <div className={css.address}>
-                      {restaurant.address}
-                    </div>
+                    <div className={css.address}>{restaurant.address}</div>
                   </div>
                   <div className="col-12">
                     <div className={css.timing}>
