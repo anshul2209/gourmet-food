@@ -41,10 +41,11 @@ app.get("/api/allrestaurants", async (req, res) => {
 
 app.get("/api/restaurant", async (req, res) => {
   const { region, name } = req.query;
-  const url = `${host_url}/webroutes/getPage?page_url=${region}/${name}/order&location=&isMobile=0`;
+  const url = 'https://www.swiggy.com/dapi/menu/v4/full?lat=28.4594965&lng=77.0266383&menuId=94818';
+  // const url = `${host_url}/webroutes/getPage?page_url=${region}/${name}/order&location=&isMobile=0`;
   console.log(url);
   const response = await axios
-    .get(url, { headers: headers_secret})
+    .get(url)
     .catch((err) => console.error(`axios error is ${err.message}`));
 
   res.send(response.data);
