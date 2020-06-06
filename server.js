@@ -1,13 +1,13 @@
 require("dotenv").config();
 const { restraunts_url, host_url } = require("./src/config");
-
+const cors = require('cors')
 const express = require("express");
 const path = require("path");
 const app = express();
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
+const origin = process.env.NODE_ENV === "development" ? 'http://localhost:3000' : 'https://foodiiee.herokuapp.com'
+app.use(cors({
+  origin,
+}))
 
 const axios = require("axios");
 
@@ -18,6 +18,14 @@ const headers = {
   "user-key": process.env.REACT_APP_USER_KEY,
 };
 
+
+app.get('/api/hello', async (req, res) => {
+  const response = await axios.get('https://www.zomato.com/ncr');
+
+  res.send(response.headers['set-cookie']);
+})
+
+
 app.get("/api/allrestaurants", async (req, res) => {
   const response = await axios
     .get(restraunts_url, { headers })
@@ -27,6 +35,7 @@ app.get("/api/allrestaurants", async (req, res) => {
 });
 
 app.get("/api/restaurant", async (req, res) => {
+  console.log(req.headers);
   const { region, name } = req.query;
   const url = `${host_url}/webroutes/getPage?page_url=${region}/${name}/order&location=&isMobile=0`;
   console.log(url);
