@@ -1,4 +1,4 @@
-require("dotenv").config();
+// require("dotenv").config();
 
 const restraunts_url =
   "https://developers.zomato.com/api/v2.1/search?entity_id=1&entity_type=city";

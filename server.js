@@ -1,13 +1,10 @@
-require("dotenv").config();
+// require("dotenv").config();
 const { restraunts_url, host_url } = require("./src/config");
 const cors = require("cors");
 const express = require("express");
 const path = require("path");
 const app = express();
-const origin =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:3000"
-    : "https://foodiiee.herokuapp.com";
+
 // app.use(cors());  
 
 const axios = require("axios");
