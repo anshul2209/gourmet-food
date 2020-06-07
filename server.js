@@ -13,6 +13,7 @@ app.use(cors());
 const axios = require("axios");
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
+  console.log('**********************************');
   console.log({config});
   return config;
 }, function (error) {
