@@ -8,26 +8,26 @@ const origin =
   process.env.NODE_ENV === "development"
     ? "http://localhost:3000"
     : "https://foodiiee.herokuapp.com";
-app.use(cors());  
+// app.use(cors());  
 
 const axios = require("axios");
 // Add a request interceptor
-axios.interceptors.request.use(function (config) {
-  console.log('**********************************');
-  console.log({config});
-  return config;
-}, function (error) {
-  return Promise.reject(error);
-});
+// axios.interceptors.request.use(function (config) {
+//   console.log('**********************************');
+//   console.log({config});
+//   return config;
+// }, function (error) {
+//   return Promise.reject(error);
+// });
 
-// Add a response interceptor
-axios.interceptors.response.use(function (response) {
-  console.log('-------------------------------------');
-  console.log(response)
-  return response;
-}, function (error) {
-  return Promise.reject(error);
-});
+// // Add a response interceptor
+// axios.interceptors.response.use(function (response) {
+//   console.log('-------------------------------------');
+//   console.log(response)
+//   return response;
+// }, function (error) {
+//   return Promise.reject(error);
+// });
 
 
 app.use(express.static(path.join(__dirname, "build")));
@@ -63,14 +63,14 @@ app.get("/api/restaurant", async (req, res) => {
   const url = `${host_url}/webroutes/getPage?page_url=${region}/${name}/order&location=&isMobile=0`;
   const response = await axios
     .get(url)
-    .catch((err) => console.error(`axios error is ${err.message}`));
+    .catch((err) => console.log(`${err.response}`));
   res.send(response.data);
 });
 
-app.get("/*", function (req, res) {
+app.get("*", function (req, res) {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8083;
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
