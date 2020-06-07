@@ -11,6 +11,23 @@ const origin =
 app.use(cors());  
 
 const axios = require("axios");
+// Add a request interceptor
+axios.interceptors.request.use(function (config) {
+  console.log({config});
+  return config;
+}, function (error) {
+  return Promise.reject(error);
+});
+
+// Add a response interceptor
+axios.interceptors.response.use(function (response) {
+  console.log('-------------------------------------');
+  console.log(response)
+  return response;
+}, function (error) {
+  return Promise.reject(error);
+});
+
 
 app.use(express.static(path.join(__dirname, "build")));
 
@@ -41,13 +58,11 @@ app.get("/api/allrestaurants", async (req, res) => {
 
 app.get("/api/restaurant", async (req, res) => {
   const { region, name } = req.query;
-  const url = 'https://www.swiggy.com/dapi/menu/v4/full?lat=28.4594965&lng=77.0266383&menuId=94818';
-  // const url = `${host_url}/webroutes/getPage?page_url=${region}/${name}/order&location=&isMobile=0`;
-  console.log(url);
+  // const url = 'https://www.swiggy.com/dapi/menu/v4/full?lat=28.4594965&lng=77.0266383&menuId=94818';
+  const url = `${host_url}/webroutes/getPage?page_url=${region}/${name}/order&location=&isMobile=0`;
   const response = await axios
     .get(url)
     .catch((err) => console.error(`axios error is ${err.message}`));
-console.log(response.data.data);
   res.send(response.data);
 });
 
@@ -55,4 +70,6 @@ app.get("/*", function (req, res) {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-app.listen(process.env.PORT || 8080);
+const port = process.env.PORT || 8080;
+
+app.listen(port, () => console.log(`Server running on port ${port}`));
