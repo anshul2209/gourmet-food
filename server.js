@@ -8,7 +8,7 @@ const origin =
   process.env.NODE_ENV === "development"
     ? "http://localhost:3000"
     : "https://foodiiee.herokuapp.com";
-app.use(cors({}));
+app.use(cors());  
 
 const axios = require("axios");
 
@@ -41,7 +41,7 @@ app.get("/api/allrestaurants", async (req, res) => {
 
 app.get("/api/restaurant", async (req, res) => {
   const { region, name } = req.query;
-  const url = 'https://cors-anywhere.herokuapp.com/https://www.swiggy.com/dapi/menu/v4/full?lat=28.4594965&lng=77.0266383&menuId=94818';
+  const url = 'https://www.swiggy.com/dapi/menu/v4/full?lat=28.4594965&lng=77.0266383&menuId=94818';
   // const url = `${host_url}/webroutes/getPage?page_url=${region}/${name}/order&location=&isMobile=0`;
   console.log(url);
   const response = await axios
