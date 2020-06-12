@@ -48,7 +48,6 @@ const Restaurant = (props) => {
       .get(`${apiEndpoint}/api/restaurant?region=${region}&name=${name}`)
       .catch((err) => console.error(`axios error is ${err.message}`));
 
-    console.log({ response });
     if (response) {
       const {
         data: {
