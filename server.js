@@ -38,6 +38,15 @@ app.get("/api/restaurant", async (req, res) => {
   res.send(response.data);
 });
 
+app.get('/api/testswiggy', async(req, res) => {
+  const url = 'https://www.swiggy.com/dapi/menu/v4/full?lat=28.4594965&lng=77.0266383&menuId=51766';
+  const response = await axios.get(url).catch((err) => {
+    console.log(`axios error is ${err.message}`);
+    res.send(err);
+  });
+  res.send(response.data);
+})
+
 app.get("*", function (req, res) {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
