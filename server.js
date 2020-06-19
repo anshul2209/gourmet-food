@@ -31,7 +31,8 @@ const axios = require("axios");
 app.use(express.static(path.join(__dirname, "build")));
 
 const headers = {
-  "user-key": process.env.REACT_APP_USER_KEY,
+  "user-key":
+    process.env.REACT_APP_USER_KEY || "38bee742336800b525c5b79659dc4fda",
 };
 
 app.get("/api/hello", (req, res) => res.send("hello"));
