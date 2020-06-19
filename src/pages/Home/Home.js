@@ -2,53 +2,41 @@ import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { RestaurantTile, Loader, Animate, Filters } from "../../components";
 import { apiEndpoint } from "../../config";
-import OrderContext from "../../OrderProvider";
 import { host_url } from "../../config";
 
 import css from "./Home.module.scss";
 import classnames from "classnames";
 
+let allRestaurants = [];
+
 const Home = (props) => {
-  const [allRestaurants, setAllRestaurants] = useState([]);
+  // Handle Data Fetching
   const [restaurantList, setRestaurantsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [cusineList, setcuisineList] = useState([]);
-  const [isFilterOpen, setFilterOpen] = useState(false);
-  const [applyFilterVisible, setFilterVisible] = useState(false);
-
-  const { dispatch } = useContext(OrderContext);
-
   useEffect(() => {
-    async function getData() {
-      await loadRestaurants();
-    }
-    getData();
+    const fetchData = async () => {
+      const response = await axios.get(`${apiEndpoint}/api/allrestaurants`);
+
+      if (response) {
+        allRestaurants = [].concat(
+          response.data.restaurants.filter(
+            (item) => !!item.restaurant.has_online_delivery
+          )
+        );
+        console.log({ allRestaurants });
+        const restaurantList = [...allRestaurants];
+
+        setRestaurantsList(restaurantList);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const loadRestaurants = async () => {
-    const response = await axios.get(`${apiEndpoint}/api/allrestaurants`);
-
-    if (response) {
-      const restaurantList = response.data.restaurants;
-      const cuisineList = restaurantList.map(
-        (rest) => rest.restaurant.cuisines.split(", ") // get array of arrays
-      );
-
-      setAllRestaurants(restaurantList);
-      setRestaurantsList(restaurantList);
-      setIsLoading(false);
-      setcuisineList([...new Set([].concat(...cuisineList))]);
-    }
-  };
-
-  const handleRestaurantClick = (restaurant) => {
-    const temp_path = restaurant.url.split("?")[0].split(host_url);
-    const restaurantDetailUrl = temp_path[1];
-
-    props.history.push(`/restaurants${restaurantDetailUrl}`);
-    dispatch({ type: "selectRestaurant", payload: restaurant });
-  };
-
+  // Handle Filtering
+  const [isFilterOpen, setFilterOpen] = useState(false);
+  const [applyFilterVisible, setFilterVisible] = useState(false);
   const handleFilter = (query) => {
     const { rating, cost, cusine } = query;
     const restaurants = allRestaurants.filter((item) => {
@@ -69,12 +57,25 @@ const Home = (props) => {
     setFilterOpen(!isFilterOpen);
     setFilterVisible(false);
   };
-
   const isRestaurantAvailable = !!(
     restaurantList &&
     restaurantList.length &&
     !isLoading
   );
+
+  // Handle Routing to Restaurant Detail
+  const handleRestaurantClick = (restaurant) => {
+    const temp_path = restaurant.url.split("?")[0].split(host_url);
+    const restaurantDetailUrl = temp_path[1];
+
+    props.history.push(`/restaurants/${restaurant.id}`);
+  };
+
+  // Handle Total Count of Restaurants
+  const [totalRestaurantCount, setRestaurantsCount] = useState(0); // called on didmount and diupdate
+  useEffect(() => {
+    setRestaurantsCount(restaurantList.length);
+  }, [restaurantList]);
 
   if (isLoading) {
     return <Loader text="Restaurant Loading..." />;
@@ -87,7 +88,10 @@ const Home = (props) => {
             <div
               className={classnames("d-none d-sm-block", css.filter_desktop)}
             >
-              <Filters cusineList={cusineList} handleQuery={handleFilter} />
+              <Filters
+                restaurantList={restaurantList}
+                handleQuery={handleFilter}
+              />
             </div>
           </div>
           {isFilterOpen && (
@@ -96,7 +100,10 @@ const Home = (props) => {
                 <div className={css.close} onClick={toggleFilter}>
                   <i className="fa fa-times-circle" aria-hidden="true"></i>
                 </div>
-                <Filters cusineList={cusineList} handleQuery={handleFilter} />
+                <Filters
+                  restaurantList={restaurantList}
+                  handleQuery={handleFilter}
+                />
                 {applyFilterVisible && (
                   <div
                     className={classnames("bg-info", css.apply)}
@@ -109,6 +116,11 @@ const Home = (props) => {
             </div>
           )}
           <div className="col-md-10 col-sm-12">
+            <div className="row">
+              <div className="col-12">
+                <h4>Total Restaurants are {totalRestaurantCount}</h4>
+              </div>
+            </div>
             <div className="row">
               {restaurantList.map((restaurantObj) => {
                 return (

@@ -1,16 +1,17 @@
 import React, { useContext } from "react";
 import css from "./MenuItem.module.scss";
 import classnames from "classnames";
-import OrderContext from "../../OrderProvider";
+import Context from "../../ContextProvider";
 
 import food_image_placeholder from "../../foodplaceholder.png";
 
 const MenuItem = (props) => {
   const {
     state: { order },
-  } = useContext(OrderContext);
+  } = useContext(Context);
   const { item } = props;
-  const quantity = (order && order[item.id]?.quantity) || 0;
+  console.log({ order });
+  const quantity = (order && order[item.item_id]?.quantity) || 0;
 
   const handleAddClick = (item) => {
     props.handleItemSelection(item);
@@ -31,7 +32,9 @@ const MenuItem = (props) => {
           <span className={css.price}>Rs. {item.price || item.min_price}</span>
           <span className={css.price}>
             {quantity === 0 && (
-              <button className="btn" onClick={() => handleAddClick(item)}>Add +</button>
+              <button className="btn" onClick={() => handleAddClick(item)}>
+                Add +
+              </button>
             )}
             {!(quantity === 0) && (
               <div className={css.edit}>
@@ -52,20 +55,24 @@ const MenuItem = (props) => {
 };
 
 const MenuCategory = (props) => {
-  const {
-    categoryMenu: { categories, id },
-  } = props;
-  const {
-    category: { items },
-  } = categories[0];
+  const temp = props.categoryMenu.map((menu) => menu.items);
+  const items = [].concat
+    .apply([], temp)
+    .sort((a, b) =>
+      a.item_image_thumb_url && !b.item_image_thumb_url
+        ? -1
+        : b.item_image_thumb_url && !a.item_image_thumb_url
+        ? 1
+        : 0
+    );
+
   return (
-    <div className={classnames("row", css.category)} id={id}>
+    <div className={classnames("row", css.category)} id={props.id}>
       {items.map((itemObj, index) => {
-        const { item } = itemObj;
         return (
           <div className="col-md-3" key={index}>
             <MenuItem
-              item={item}
+              item={itemObj}
               handleItemSelection={props.handleItemSelection}
             />
           </div>

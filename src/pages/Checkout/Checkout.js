@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import OrderContext from "../../OrderProvider";
+import Context from "../../ContextProvider";
 import { CheckoutItems } from "../../components";
 import css from "./Checkout.module.scss";
 import classnames from "classnames";
@@ -8,7 +8,7 @@ import { getItemsQuantity, getAmount } from "../../helpers/checkout";
 const Checkout = (props) => {
   const {
     state: { order },
-  } = useContext(OrderContext);
+  } = useContext(Context);
   const items = Object.values(order || {});
   const itemQuantity = getItemsQuantity(order);
   const total = getAmount(order);

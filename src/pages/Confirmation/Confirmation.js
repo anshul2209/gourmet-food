@@ -3,13 +3,13 @@ import classnames from "classnames";
 import { Loader } from "../../components";
 import { getAmount } from "../../helpers/checkout";
 import css from "./Confirmation.module.scss";
-import OrderContext from "../../OrderProvider";
+import Context from "../../ContextProvider";
 
 const Confirmation = () => {
   const [isLoading, toggleIsLoading] = useState(true);
   const {
     state: { order },
-  } = useContext(OrderContext);
+  } = useContext(Context);
   const total = getAmount(order);
 
   async function placeOrder() {

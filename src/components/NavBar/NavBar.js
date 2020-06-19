@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import css from "./NavBar.module.scss";
 import logoImg from "../../logo.svg";
-import OrderContext from "../../OrderProvider";
+import Context from "../../ContextProvider";
 import { getItemsQuantity } from "../../helpers/checkout";
 
 
@@ -9,7 +9,7 @@ const Navbar = () => {
   const {
     state: { order, isCheckoutOpen },
     dispatch
-  } = useContext(OrderContext);
+  } = useContext(Context);
   const itemQuantity = getItemsQuantity(order);
 
   const handleClick = () => {

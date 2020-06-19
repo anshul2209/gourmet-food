@@ -1,14 +1,13 @@
 import React, { useReducer } from "react";
 import { Home, Restaurant, Checkout, Confirmation } from "./pages";
 import { NavBar } from "./components";
-import OrderContext from "./OrderProvider";
+import Context from "./ContextProvider";
 import { Route, Switch } from "react-router-dom";
 
 const App = () => {
   const initialState = {
     order: {},
     isCheckoutOpen: false,
-    restaurant: {}
   };
 
   let reducer = (state = initialState, action) => {
@@ -19,9 +18,6 @@ const App = () => {
       case "toggleCheckout": {
         return { ...state, isCheckoutOpen: action.payload };
       }
-      case "selectRestaurant": {
-        return { ...state, restaurant: action.payload }
-      }
       default:
         return state;
     }
@@ -29,21 +25,21 @@ const App = () => {
 
   let [state, dispatch] = useReducer(reducer, initialState);
 
-  let OrderContextValue = { state, dispatch };
+  let ContextValue = { state, dispatch };
   return (
-    <OrderContext.Provider value={OrderContextValue}>
+    <Context.Provider value={ContextValue}>
       <NavBar />
       <main>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/restaurants/:region/:name" component={Restaurant} />
+          <Route path="/restaurants/:restaurant_id" component={Restaurant} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/confirm" component={Confirmation} />
         </Switch>
       </main>
 
       {/* <footer className={classnames(css.footer)} /> */}
-    </OrderContext.Provider>
+    </Context.Provider>
   );
 };
 

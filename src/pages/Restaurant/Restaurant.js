@@ -4,7 +4,7 @@ import { getItemsQuantity, getAmount } from "../../helpers/checkout";
 import axios from "axios";
 import { apiEndpoint } from "../../config";
 import classnames from "classnames";
-import OrderContext from "../../OrderProvider";
+import Context from "../../ContextProvider";
 import Checkout from "../Checkout/Checkout";
 
 import css from "./Restaurant.module.scss";
@@ -13,7 +13,7 @@ const Restaurant = (props) => {
   const {
     state: { order, isCheckoutOpen },
     dispatch,
-  } = useContext(OrderContext);
+  } = useContext(Context);
   const items = Object.values(order || {});
   const itemsNumber = getItemsQuantity(order);
   const amount = getAmount(order);
@@ -22,59 +22,56 @@ const Restaurant = (props) => {
   const [isMenuShown, toggleMenuShown] = useState(false);
   const [isMenuLoading, toggleMenuLoading] = useState(true);
   const [restaurant, setRestaurant] = useState({
-    cuisine_string: "",
+    cuisines: "",
     name: "",
-    rating: {},
+    user_rating: {},
     timing: {},
-    address: "",
-    res_thumb: "",
+    location: {},
+    o2_featured_image: "",
   });
 
   const refs = menuItems
-    .map((item) => item.menu)
+    .map((item) => item.menu_id)
     .reduce((acc, value) => {
-      acc[value.id] = React.createRef();
+      acc[value] = React.createRef();
       return acc;
     }, {});
 
   const {
     match: {
-      params: { region, name },
+      params: { region, name, restaurant_id },
     },
   } = props;
 
   const loadDailyMenu = async () => {
     const response = await axios
-      .get(`${apiEndpoint}/api/restaurant?region=${region}&name=${name}`)
+      .get(
+        `${apiEndpoint}/api/restaurant?region=${region}&name=${name}&restaurant_id=${restaurant_id}`
+      )
       .catch((err) => console.error(`axios error is ${err.message}`));
 
     if (response) {
       const {
-        data: {
-          page_data: {
-            order: {
-              menuList: { menus },
-            },
-            sections: { SECTION_BASIC_INFO, SECTION_RES_CONTACT },
-          },
-        },
+        data: { menus, restaurant_info },
       } = response;
+
       const {
-        cuisine_string,
+        cuisines,
         name,
-        rating,
+        user_rating,
         timing,
-        res_thumb,
-      } = SECTION_BASIC_INFO;
-      const { address } = SECTION_RES_CONTACT;
+        o2_featured_image,
+        location,
+      } = restaurant_info;
       setRestaurant({
-        cuisine_string,
+        cuisines,
         name,
-        rating,
+        user_rating,
         timing,
-        address,
-        res_thumb,
+        location,
+        o2_featured_image,
       });
+      console.log({menus});
       setmenuItems(menus);
       toggleMenuLoading(!isMenuLoading);
     }
@@ -102,7 +99,7 @@ const Restaurant = (props) => {
 
   const handleItemSelection = (item, action) => {
     const checkoutItems = { ...order };
-    const orderItem = checkoutItems[item.id];
+    const orderItem = checkoutItems[item.item_id];
 
     if (orderItem) {
       const quantity =
@@ -110,12 +107,12 @@ const Restaurant = (props) => {
           ? Math.max(0, orderItem.quantity - 1)
           : orderItem.quantity + 1;
 
-      checkoutItems[item.id].quantity = quantity;
+      checkoutItems[item.item_id].quantity = quantity;
     } else {
-      const { id, name, price, min_price } = item;
+      const { item_id, name, price, min_price } = item;
 
-      checkoutItems[item.id] = {
-        id,
+      checkoutItems[item.item_id] = {
+        item_id,
         quantity: 1,
         name,
         price: price || min_price,
@@ -135,13 +132,13 @@ const Restaurant = (props) => {
 
   // Local Styles
   const ratingStyle = {
-    background: `#${restaurant.rating?.rating_color}`,
+    background: `#${restaurant.user_rating?.rating_color}`,
     padding: "5px",
     margin: "5px 0px",
     width: "fit-content",
   };
   const featuredDivStyle = {
-    backgroundImage: `url(${restaurant.res_thumb})`,
+    backgroundImage: `url(${restaurant.o2_featured_image})`,
     backgroundSize: "contain",
   };
 
@@ -154,7 +151,7 @@ const Restaurant = (props) => {
     <React.Fragment>
       <div className={classnames("container-fluid", css.restaurantWrapper)}>
         <div className={classnames("row")}>
-          <div className={classnames(showCheckout ? "col-md-10" : "col-12")}>
+          <div className={classnames(showCheckout ? "col-md-9" : "col-12")}>
             <div className={classnames("row")}>
               <div className="col-sm-12">
                 <div className={css.background} style={featuredDivStyle} />
@@ -168,21 +165,21 @@ const Restaurant = (props) => {
                   </div>
                   <div className="col-2">
                     <div style={ratingStyle}>
-                      {restaurant.rating?.aggregate_rating}
+                      {restaurant.user_rating?.aggregate_rating}
                     </div>
-                    <div>{restaurant.rating?.rating_subtitle}</div>
+                    <div>{restaurant.user_rating?.rating_text}</div>
                   </div>
                 </div>
               </div>
               <div className={classnames("col-12")}>
                 <div className="row">
                   <div className="col-12">
-                    <div className={css.cusines}>
-                      {restaurant.cuisine_string}
-                    </div>
+                    <div className={css.cusines}>{restaurant.cuisines}</div>
                   </div>
                   <div className="col-12">
-                    <div className={css.address}>{restaurant.address}</div>
+                    <div className={css.location}>
+                      {restaurant.location.locality}
+                    </div>
                   </div>
                   <div className="col-12">
                     <div className={css.timing}>
@@ -202,10 +199,10 @@ const Restaurant = (props) => {
                     return (
                       <div
                         className={css.item}
-                        key={item.menu.id}
-                        id={item.menu.id}
+                        key={item.menu_id}
+                        id={item.menu_id}
                       >
-                        {item.menu.name}
+                        {item.name}
                       </div>
                     );
                   })}
@@ -217,12 +214,13 @@ const Restaurant = (props) => {
                     return (
                       <div
                         className={classnames("col-sm-12", css.menucategory)}
-                        key={item.menu.id}
+                        key={item.menu_id}
                       >
-                        <h4 ref={refs[item.menu.id]}>{item.menu.name}</h4>
+                        <h4 ref={refs[item.menu_id]}>{item.name}</h4>
                         <MenuCategory
-                          categoryMenu={item.menu}
+                          categoryMenu={item.categories}
                           handleItemSelection={handleItemSelection}
+                          id={item.menu_id}
                         />
                       </div>
                     );
@@ -231,7 +229,7 @@ const Restaurant = (props) => {
               </div>
             </div>
           </div>
-          <div className={classnames(showCheckout ? "col-md-2" : "d-none")}>
+          <div className={classnames(showCheckout ? "col-md-3" : "d-none")}>
             <div className={css.checkout}>
               <Checkout
                 handleCheckout={handleCheckout}
@@ -249,10 +247,10 @@ const Restaurant = (props) => {
                 return (
                   <div
                     className={css.item}
-                    key={item.menu.id}
-                    id={item.menu.id}
+                    key={item.menu_id}
+                    id={item.menu_id}
                   >
-                    {item.menu.name}
+                    {item.name}
                   </div>
                 );
               })}
