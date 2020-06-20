@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { RestaurantTile, Loader, Animate, Filters, NoResults } from "../../components";
+import {
+  RestaurantTile,
+  Loader,
+  Animate,
+  Filters,
+  NoResults,
+} from "../../components";
 import { apiEndpoint } from "../../config";
 import { sortImagewise } from "../../helpers/restaurant";
 
@@ -96,7 +102,7 @@ const Home = (props) => {
               className={classnames("d-none d-sm-block", css.filter_desktop)}
             >
               <Filters
-                restaurantList={restaurantList}
+                restaurantList={allRestaurants}
                 handleQuery={handleFilter}
               />
             </div>
@@ -108,7 +114,7 @@ const Home = (props) => {
                   <i className="fa fa-times-circle" aria-hidden="true"></i>
                 </div>
                 <Filters
-                  restaurantList={restaurantList}
+                  restaurantList={allRestaurants}
                   handleQuery={handleFilter}
                 />
                 {applyFilterVisible && (
@@ -124,25 +130,30 @@ const Home = (props) => {
           )}
           <div className="col-md-10 col-sm-12">
             <div className="row">
-              {resultsFound && restaurantList.map((restaurantObj) => {
-                return (
-                  <div
-                    className="col-md-4 col-sm-12 mb-4"
-                    key={restaurantObj.restaurant.id}
-                  >
-                    <Animate
-                      in={isRestaurantAvailable}
-                      transitionStyles={cardsTransitionStyles}
+              {resultsFound &&
+                restaurantList.map((restaurantObj) => {
+                  return (
+                    <div
+                      className="col-md-4 col-sm-12 mb-4"
+                      key={restaurantObj.restaurant.id}
                     >
-                      <RestaurantTile
-                        restaurant={restaurantObj.restaurant}
-                        onClick={handleRestaurantClick}
-                      />
-                    </Animate>
-                  </div>
-                );
-              })}
-              {!resultsFound && <NoResults />}
+                      <Animate
+                        in={isRestaurantAvailable}
+                        transitionStyles={cardsTransitionStyles}
+                      >
+                        <RestaurantTile
+                          restaurant={restaurantObj.restaurant}
+                          onClick={handleRestaurantClick}
+                        />
+                      </Animate>
+                    </div>
+                  );
+                })}
+              {!resultsFound && (
+                <div className="col-12">
+                  <NoResults />
+                </div>
+              )}
             </div>
           </div>
         </div>
