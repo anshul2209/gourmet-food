@@ -4,7 +4,7 @@ import classnames from "classnames";
 import Context from "../../ContextProvider";
 import { sortImagewise } from "../../helpers/restaurant";
 
-import food_image_placeholder from "../../foodplaceholder.png";
+import food_image_placeholder from "../../images/foodplaceholder.png";
 
 const MenuItem = (props) => {
   const {

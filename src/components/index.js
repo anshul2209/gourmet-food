@@ -5,6 +5,7 @@ import Animate from './Animate/Animate';
 import MenuCategory from './MenuItem/MenuItem';
 import CheckoutItems from './CheckoutItems/CheckoutItems';
 import NavBar from './NavBar/NavBar';
+import NoResults from './NoResults/NoResults';
 
 export {
     Filters,
@@ -13,5 +14,6 @@ export {
     Animate,
     MenuCategory,
     CheckoutItems,
-    NavBar
+    NavBar,
+    NoResults
 };

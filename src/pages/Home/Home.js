@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { RestaurantTile, Loader, Animate, Filters } from "../../components";
+import { RestaurantTile, Loader, Animate, Filters, NoResults } from "../../components";
 import { apiEndpoint } from "../../config";
 import { sortImagewise } from "../../helpers/restaurant";
 
@@ -84,6 +84,9 @@ const Home = (props) => {
   if (isLoading) {
     return <Loader text="Restaurant Loading..." />;
   }
+
+  const resultsFound = !!(restaurantList && restaurantList.length);
+
   return (
     <React.Fragment>
       <div className="container-fluid">
@@ -121,7 +124,7 @@ const Home = (props) => {
           )}
           <div className="col-md-10 col-sm-12">
             <div className="row">
-              {restaurantList.map((restaurantObj) => {
+              {resultsFound && restaurantList.map((restaurantObj) => {
                 return (
                   <div
                     className="col-md-4 col-sm-12 mb-4"
@@ -139,6 +142,7 @@ const Home = (props) => {
                   </div>
                 );
               })}
+              {!resultsFound && <NoResults />}
             </div>
           </div>
         </div>

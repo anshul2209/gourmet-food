@@ -1,6 +1,6 @@
 import React from "react";
 import "./RestaurantTile.scss";
-import food_image_placeholder from "../../foodplaceholder.png";
+import food_image_placeholder from "../../images/foodplaceholder.png";
 
 const RestaurantTile = (props) => {
   const handleClick = (restaurant) => () => {

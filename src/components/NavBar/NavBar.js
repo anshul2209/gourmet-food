@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import css from "./NavBar.module.scss";
-import logoImg from "../../logo.svg";
+import logoImg from "../../images/logo.svg";
 import Context from "../../ContextProvider";
 import { getItemsQuantity } from "../../helpers/checkout";
 
