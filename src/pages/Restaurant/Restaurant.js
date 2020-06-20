@@ -41,6 +41,9 @@ const Restaurant = (props) => {
     match: {
       params: { restaurant_id },
     },
+    location: {
+      state: { featured_image },
+    },
   } = props;
 
   useEffect(() => {
@@ -69,7 +72,7 @@ const Restaurant = (props) => {
           user_rating,
           timing,
           location,
-          o2_featured_image,
+          o2_featured_image: featured_image || o2_featured_image,
           average_delivery_time_display,
         });
         setmenuItems(menus);
@@ -77,7 +80,7 @@ const Restaurant = (props) => {
       }
     }
     fetchData();
-  }, [isMenuLoading, restaurant_id]);
+  }, [restaurant_id]);
 
   // Functions
   const handleCategorySelect = (event) => {
@@ -134,7 +137,7 @@ const Restaurant = (props) => {
   };
   const featuredDivStyle = {
     backgroundImage: `url(${restaurant.o2_featured_image})`,
-    backgroundSize: "contain",
+    backgroundSize: "cover",
     backgroundPosition: "center",
   };
 
@@ -269,20 +272,21 @@ const Restaurant = (props) => {
               transitionStyles={cardsTransitionStyles}
               timeOut={checkoutTimeout}
             > */}
-            <div className={classnames("container-fluid", css.checkout)}>
-              <div className={classnames("row", css.checkoutHeader)}>
-                <div className={"col-10"}>
-                  <h3>Your Orders</h3>
+            {isCheckoutOpen && (
+              <div className={classnames("container-fluid", css.checkout)}>
+                <div className={classnames("row", css.checkoutHeader)}>
+                  <div className={"col-10"}>
+                    <h3>Your Orders</h3>
+                  </div>
+                  <div className={"col-2"}>
+                    <span onClick={handleClose}>
+                      <i className="fa fa-times-circle" aria-hidden="true"></i>
+                    </span>
+                  </div>
                 </div>
-                <div className={"col-2"}>
-                  <span onClick={handleClose}>
-                    <i className="fa fa-times-circle" aria-hidden="true"></i>
-                  </span>
-                </div>
+                <CheckoutItems items={items} />
               </div>
-              <CheckoutItems items={items} />
-            </div>
-            {/* </Animate> */}
+            )}
             <div className={"container-fluid"}>
               <div className={classnames("row", css.itemDetails)}>
                 <div className="col-4">
@@ -318,4 +322,4 @@ const Restaurant = (props) => {
   );
 };
 
-export default Restaurant;
+export default React.memo(Restaurant);

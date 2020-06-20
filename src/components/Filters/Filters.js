@@ -16,7 +16,7 @@ const Filters = ({ restaurantList, handleQuery }) => {
 
     const uniqueCuisines = [...new Set([].concat(...cusineList))];
     setcuisine(uniqueCuisines);
-  }, [restaurantList]);
+  }, []);
 
   const [filters, setFilters] = useState({
     rating: 1,

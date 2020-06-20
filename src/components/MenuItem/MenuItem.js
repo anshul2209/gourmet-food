@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import css from "./MenuItem.module.scss";
 import classnames from "classnames";
 import Context from "../../ContextProvider";
+import { sortImagewise } from "../../helpers/restaurant";
 
 import food_image_placeholder from "../../foodplaceholder.png";
 
@@ -54,16 +55,10 @@ const MenuItem = (props) => {
 };
 
 const MenuCategory = (props) => {
-  const temp = props.categoryMenu.map((menu) => menu.items);
-  const items = [].concat
-    .apply([], temp)
-    .sort((a, b) =>
-      a.item_image_thumb_url && !b.item_image_thumb_url
-        ? -1
-        : b.item_image_thumb_url && !a.item_image_thumb_url
-        ? 1
-        : 0
-    );
+  let items = props.categoryMenu.map((menu) => menu.items);
+  items = [].concat.apply([], items);
+
+  items = sortImagewise(items, "item_image_thumb_url");
 
   return (
     <div className={classnames("row", css.category)} id={props.id}>

@@ -27,7 +27,7 @@ const Confirmation = () => {
   useEffect(() => {
     setTotal(getAmount(order));
     dispatch({ type: "resetApp" });
-  }, [dispatch, order]);
+  }, []);
 
   if (isLoading) {
     return <Loader text="Placing your order please wait..." />;
@@ -52,4 +52,4 @@ const Confirmation = () => {
   }
 };
 
-export default Confirmation;
+export default React.memo(Confirmation);

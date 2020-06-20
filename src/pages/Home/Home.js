@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { RestaurantTile, Loader, Animate, Filters } from "../../components";
 import { apiEndpoint } from "../../config";
+import { sortImagewise } from "../../helpers/restaurant";
 
 import css from "./Home.module.scss";
 import classnames from "classnames";
@@ -47,7 +48,7 @@ const Home = (props) => {
       );
     });
 
-    setRestaurantsList(restaurants);
+    setRestaurantsList(sortImagewise(restaurants, "thumb"));
     setFilterVisible(true);
   };
 
@@ -63,7 +64,12 @@ const Home = (props) => {
 
   // Handle Routing to Restaurant Detail
   const handleRestaurantClick = (restaurant) => {
-    props.history.push(`/restaurants/${restaurant.id}`);
+    props.history.push({
+      pathname: `/restaurants/${restaurant.id}`,
+      state: {
+        featured_image: restaurant.featured_image,
+      },
+    });
   };
 
   // Animation Style
