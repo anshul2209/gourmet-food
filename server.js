@@ -1,6 +1,6 @@
 if (process.env.NODE_ENV !== "production") require("dotenv").config();
 
-const { restraunts_url, host_url } = require("./src/config");
+const { restraunts_url } = require("./src/config");
 const cors = require("cors");
 const express = require("express");
 const path = require("path");
