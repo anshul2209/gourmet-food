@@ -4,6 +4,7 @@
 
 .item {
   padding: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 
   .image {
     text-align: center;
@@ -20,8 +21,9 @@
       align-self: center;
       justify-content: space-between;
       padding: 5px 0px;
-      .price{
-        button{
+
+      .price {
+        button {
           border: 1px solid;
         }
       }
@@ -43,6 +45,13 @@
       font-size: 1rem;
       font-weight: 500;
       color: var(--txt-color-lightblack);
+      height: 35px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      &:hover{
+        overflow: visible;
+      }
     }
   }
 }

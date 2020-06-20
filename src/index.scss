@@ -5,19 +5,36 @@
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
+
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+
+
 }
 
-html, body {
+html,
+body {
   height: 100%;
   background: #f3f3f3; //url('./background.jpg');
   background-size: 100px;
 }
-html{
+
+html {
   font-size: 16px;
 }
+
 @media only screen and (max-width: 600px) {
-  html{
+  html {
     font-size: 14px;
   }
 }
@@ -27,7 +44,7 @@ code {
     monospace;
 }
 
-:root{
+:root {
   --txt-color-lightblack: #333;
   --txt-color-black: black;
 }

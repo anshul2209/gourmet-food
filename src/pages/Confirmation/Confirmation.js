@@ -9,23 +9,25 @@ const Confirmation = () => {
   const [isLoading, toggleIsLoading] = useState(true);
   const {
     state: { order },
+    dispatch,
   } = useContext(Context);
-  const total = getAmount(order);
-
-  async function placeOrder() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(toggleIsLoading(false));
-      }, 5000);
-    });
-  }
 
   useEffect(() => {
     async function getData() {
-      await placeOrder();
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(toggleIsLoading(false));
+        }, 5000);
+      });
     }
     getData();
   }, []);
+
+  const [total, setTotal] = useState(0);
+  useEffect(() => {
+    setTotal(getAmount(order));
+    dispatch({ type: "resetApp" });
+  }, [dispatch, order]);
 
   if (isLoading) {
     return <Loader text="Placing your order please wait..." />;
@@ -33,15 +35,15 @@ const Confirmation = () => {
     return (
       <div className={classnames("container-fluid")}>
         <div className={classnames("row", css.wrapper)}>
-          <div className={classnames("col-md-8 col-sm-12 my-auto")}>
+          <div className={classnames("col-md-8 col-sm-12")}>
             <div className={css.confirm} />
           </div>
-          <div className={classnames("col-md-4 col-sm-12 my-auto")}>
+          <div className={classnames("col-md-4 col-sm-12s")}>
             <div className={css.orderDetails}>
-              <h2>Tasty Food Enroute!</h2>
-              <h4>
+              <h1>Tasty Food Enroute...</h1>
+              <h2>
                 Please pay the delivery agent <span>Rs {total}</span>{" "}
-              </h4>
+              </h2>
             </div>
           </div>
         </div>

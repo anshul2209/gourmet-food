@@ -1,8 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { RestaurantTile, Loader, Animate, Filters } from "../../components";
 import { apiEndpoint } from "../../config";
-import { host_url } from "../../config";
 
 import css from "./Home.module.scss";
 import classnames from "classnames";
@@ -23,7 +22,6 @@ const Home = (props) => {
             (item) => !!item.restaurant.has_online_delivery
           )
         );
-        console.log({ allRestaurants });
         const restaurantList = [...allRestaurants];
 
         setRestaurantsList(restaurantList);
@@ -65,17 +63,17 @@ const Home = (props) => {
 
   // Handle Routing to Restaurant Detail
   const handleRestaurantClick = (restaurant) => {
-    const temp_path = restaurant.url.split("?")[0].split(host_url);
-    const restaurantDetailUrl = temp_path[1];
-
     props.history.push(`/restaurants/${restaurant.id}`);
   };
 
-  // Handle Total Count of Restaurants
-  const [totalRestaurantCount, setRestaurantsCount] = useState(0); // called on didmount and diupdate
-  useEffect(() => {
-    setRestaurantsCount(restaurantList.length);
-  }, [restaurantList]);
+  // Animation Style
+
+  const cardsTransitionStyles = {
+    entering: { transform: "scale(0.5)", opacity: 0 },
+    entered: { transform: "scale(1)", opacity: 1 },
+    exiting: { opacity: 0 },
+    exited: { opacity: 0 },
+  };
 
   if (isLoading) {
     return <Loader text="Restaurant Loading..." />;
@@ -117,18 +115,16 @@ const Home = (props) => {
           )}
           <div className="col-md-10 col-sm-12">
             <div className="row">
-              <div className="col-12">
-                <h4>Total Restaurants are {totalRestaurantCount}</h4>
-              </div>
-            </div>
-            <div className="row">
               {restaurantList.map((restaurantObj) => {
                 return (
                   <div
                     className="col-md-4 col-sm-12 mb-4"
                     key={restaurantObj.restaurant.id}
                   >
-                    <Animate in={isRestaurantAvailable}>
+                    <Animate
+                      in={isRestaurantAvailable}
+                      transitionStyles={cardsTransitionStyles}
+                    >
                       <RestaurantTile
                         restaurant={restaurantObj.restaurant}
                         onClick={handleRestaurantClick}
@@ -153,4 +149,4 @@ const Home = (props) => {
   );
 };
 
-export default Home;
+export default React.memo(Home);

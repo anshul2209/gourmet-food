@@ -4,7 +4,12 @@ import { NavBar } from "./components";
 import Context from "./ContextProvider";
 import { Route, Switch } from "react-router-dom";
 
-const App = () => {
+if (process.env.NODE_ENV !== "production") {
+  const { whyDidYouUpdate } = require("why-did-you-update");
+  whyDidYouUpdate(React);
+}
+
+const App = (props) => {
   const initialState = {
     order: {},
     isCheckoutOpen: false,
@@ -17,6 +22,9 @@ const App = () => {
       }
       case "toggleCheckout": {
         return { ...state, isCheckoutOpen: action.payload };
+      }
+      case "resetApp": {
+        return { ...initialState };
       }
       default:
         return state;
@@ -37,10 +45,8 @@ const App = () => {
           <Route path="/confirm" component={Confirmation} />
         </Switch>
       </main>
-
-      {/* <footer className={classnames(css.footer)} /> */}
     </Context.Provider>
   );
 };
 
-export default App;
+export default React.memo(App);

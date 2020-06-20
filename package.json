@@ -45,7 +45,8 @@
     ]
   },
   "devDependencies": {
-    "concurrently": "^5.2.0"
+    "concurrently": "^5.2.0",
+    "why-did-you-update": "^1.0.8"
   },
   "engines": {
     "node": ">=10 <11",

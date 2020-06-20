@@ -7,6 +7,7 @@ export default function CheckoutItems({ items }) {
     <section>
       {items.map((itm) => {
         const { name, quantity, price } = itm;
+        if (!quantity) return null;
         return (
           <div className={classnames(css.order, "row")} key={name}>
             <div className="col-10">

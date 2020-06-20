@@ -39,50 +39,45 @@ const Restaurant = (props) => {
 
   const {
     match: {
-      params: { region, name, restaurant_id },
+      params: { restaurant_id },
     },
   } = props;
 
-  const loadDailyMenu = async () => {
-    const response = await axios
-      .get(
-        `${apiEndpoint}/api/restaurant?region=${region}&name=${name}&restaurant_id=${restaurant_id}`
-      )
-      .catch((err) => console.error(`axios error is ${err.message}`));
-
-    if (response) {
-      const {
-        data: { menus, restaurant_info },
-      } = response;
-
-      const {
-        cuisines,
-        name,
-        user_rating,
-        timing,
-        o2_featured_image,
-        location,
-      } = restaurant_info;
-      setRestaurant({
-        cuisines,
-        name,
-        user_rating,
-        timing,
-        location,
-        o2_featured_image,
-      });
-      console.log({menus});
-      setmenuItems(menus);
-      toggleMenuLoading(!isMenuLoading);
-    }
-  };
-
   useEffect(() => {
     async function fetchData() {
-      await loadDailyMenu();
+      const response = await axios
+        .get(`${apiEndpoint}/api/restaurant?restaurant_id=${restaurant_id}`)
+        .catch((err) => console.error(`axios error is ${err.message}`));
+
+      if (response) {
+        const {
+          data: { menus, restaurant_info },
+        } = response;
+
+        const {
+          cuisines,
+          name,
+          user_rating,
+          timing,
+          average_delivery_time_display,
+          o2_featured_image,
+          location,
+        } = restaurant_info;
+        setRestaurant({
+          cuisines,
+          name,
+          user_rating,
+          timing,
+          location,
+          o2_featured_image,
+          average_delivery_time_display,
+        });
+        setmenuItems(menus);
+        toggleMenuLoading(!isMenuLoading);
+      }
     }
     fetchData();
-  }, []);
+  }, [isMenuLoading, restaurant_id]);
 
   // Functions
   const handleCategorySelect = (event) => {
@@ -140,6 +135,7 @@ const Restaurant = (props) => {
   const featuredDivStyle = {
     backgroundImage: `url(${restaurant.o2_featured_image})`,
     backgroundSize: "contain",
+    backgroundPosition: "center",
   };
 
   const showCheckout = isCheckoutOpen && !!itemsNumber;
@@ -151,6 +147,7 @@ const Restaurant = (props) => {
     <React.Fragment>
       <div className={classnames("container-fluid", css.restaurantWrapper)}>
         <div className={classnames("row")}>
+          {/* <Animate in={showCheckout} transitionStyles={cardsTransitionStyles}> */}
           <div className={classnames(showCheckout ? "col-md-9" : "col-12")}>
             <div className={classnames("row")}>
               <div className="col-sm-12">
@@ -160,10 +157,10 @@ const Restaurant = (props) => {
             <div className={classnames("row", css.details)}>
               <div className={classnames("col-12")}>
                 <div className="row">
-                  <div className="col-10">
+                  <div className="col-9">
                     <div className={css.name}>{restaurant.name}</div>
                   </div>
-                  <div className="col-2">
+                  <div className="col-3">
                     <div style={ratingStyle}>
                       {restaurant.user_rating?.aggregate_rating}
                     </div>
@@ -183,7 +180,7 @@ const Restaurant = (props) => {
                   </div>
                   <div className="col-12">
                     <div className={css.timing}>
-                      {restaurant.timing?.timing_desc}
+                      {`Delivery in ${restaurant.average_delivery_time_display}`}
                     </div>
                   </div>
                 </div>
@@ -229,6 +226,8 @@ const Restaurant = (props) => {
               </div>
             </div>
           </div>
+          {/* </Animate> */}
+          {/* <Animate in={showCheckout} transitionStyles={cardsTransitionStyles}> */}
           <div className={classnames(showCheckout ? "col-md-3" : "d-none")}>
             <div className={css.checkout}>
               <Checkout
@@ -237,6 +236,7 @@ const Restaurant = (props) => {
               />
             </div>
           </div>
+          {/* </Animate> */}
         </div>
       </div>
       <div className={classnames(css.bottomBar, "d-sm-block d-md-none")}>
@@ -264,19 +264,25 @@ const Restaurant = (props) => {
         </div>
         {!!itemsNumber && (
           <div className={classnames(css.checkoutBar)}>
-            {isCheckoutOpen && (
-              <div className={classnames("container-fluid", css.checkout)}>
-                <div className={classnames("row", css.checkoutHeader)}>
-                  <div className={"col-10"}>
-                    <h3>Your Orders</h3>
-                  </div>
-                  <div className={"col-2"}>
-                    <span>Close</span>
-                  </div>
+            {/* <Animate
+              in={isCheckoutOpen}
+              transitionStyles={cardsTransitionStyles}
+              timeOut={checkoutTimeout}
+            > */}
+            <div className={classnames("container-fluid", css.checkout)}>
+              <div className={classnames("row", css.checkoutHeader)}>
+                <div className={"col-10"}>
+                  <h3>Your Orders</h3>
                 </div>
-                <CheckoutItems items={items} />
+                <div className={"col-2"}>
+                  <span onClick={handleClose}>
+                    <i className="fa fa-times-circle" aria-hidden="true"></i>
+                  </span>
+                </div>
               </div>
-            )}
+              <CheckoutItems items={items} />
+            </div>
+            {/* </Animate> */}
             <div className={"container-fluid"}>
               <div className={classnames("row", css.itemDetails)}>
                 <div className="col-4">

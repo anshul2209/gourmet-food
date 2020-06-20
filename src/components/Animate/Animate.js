@@ -1,37 +1,42 @@
-import React from 'react';
-import { Transition } from 'react-transition-group';
+import React from "react";
+import PropTypes from "prop-types";
+import { Transition } from "react-transition-group";
 
 const defaultStyle = {
   transition: `transform 500ms, opacity 500ms ease`,
-  opacity: 1
-};
-const transitionStyles = {
-  entering: { transform: 'scale(0.5)', opacity: 0 },
-  entered: { transform: 'scale(1)', opacity: 1 },
-  exiting: { opacity: 0 },
-  exited: { opacity: 0 }
+  opacity: 1,
 };
 
 const Animate = (props) => (
   <Transition
     in={props.in}
-    timeout={{
+    
+    timeout={props.timeout || {
       appear: 100,
       enter: 300,
-      exit: 300
+      exit: 300,
     }}
     appear
     unmountOnExit
   >
-    {state => {
-      return (<div style={{
-        ...defaultStyle,
-        ...transitionStyles[state]
-      }}>
-        {props.children}
-      </div>)
+    {(state) => {
+      let animationStyle = defaultStyle;
+
+      if (props.transitionStyles) {
+        animationStyle = {
+          ...animationStyle,
+          ...props.transitionStyles[state],
+        };
+      }
+
+      return <div style={animationStyle}>{props.children}</div>;
     }}
   </Transition>
-)
+);
+
+Animate.propTypes = {
+  in: PropTypes.bool.isRequired,
+  transitionStyles: PropTypes.object,
+};
 
 export default Animate;

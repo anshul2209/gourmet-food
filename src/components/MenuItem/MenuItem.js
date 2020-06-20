@@ -10,7 +10,6 @@ const MenuItem = (props) => {
     state: { order },
   } = useContext(Context);
   const { item } = props;
-  console.log({ order });
   const quantity = (order && order[item.item_id]?.quantity) || 0;
 
   const handleAddClick = (item) => {
