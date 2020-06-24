@@ -209,7 +209,7 @@ const Restaurant = (props) => {
                 </div>
               </div>
               <div className={classnames("col-md-10 col-sm-12")}>
-                <div className={css.menu}>
+                <div className={classnames("row", css.menu)}>
                   {menuItems.map((item) => {
                     return (
                       <div
