@@ -41,7 +41,7 @@ const MenuItem = (props) => {
       <div className={css.quantity}>
         {quantity === 0 && (
           <button className="btn" onClick={() => handleAddClick(item)}>
-            Add +
+            Add
           </button>
         )}
         {!(quantity === 0) && (
