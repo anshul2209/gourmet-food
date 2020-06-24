@@ -22,6 +22,12 @@
 
 }
 
+@media only screen and (max-width: 600px) {
+  #root {
+    padding-bottom: 50px;
+  }
+}
+
 html,
 body {
   height: 100%;
